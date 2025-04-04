@@ -1,1 +1,1 @@
-web: uvicorn EcommerceStore.asgi:application --host 0.0.0.0 --port $PORT
+web: gunicorn EcommerceStore.asgi:application -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
