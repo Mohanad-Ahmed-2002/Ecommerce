@@ -1,1 +1,1 @@
-gunicorn EcommerceStore.asgi:application
+web: uvicorn EcommerceStore.asgi:application --host 0.0.0.0 --port $PORT
