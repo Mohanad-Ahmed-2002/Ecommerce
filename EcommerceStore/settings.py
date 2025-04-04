@@ -76,7 +76,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'EcommerceStore.wsgi.application'
+ASGI_APPLICATION = 'EcommerceStore.asgi.application'
 
 
 # Database
