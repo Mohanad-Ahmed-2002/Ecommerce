@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <title>{% block title %}MA Store{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+
+    <nav
+        class="bg-white shadow-md py-3 px-6 flex justify-between items-center border-b border-gray-300 fixed w-full z-50">
+        <!-- Logo Section -->
+        <div class="w-12">
+            <a href="{% url 'home' %}">
+                <img src="/static/images/MO log.jpeg" alt="Logo"
+                    class="object-contain rounded-lg motion-safe:animate-bounce">
+            </a>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="flex gap-12">
+            <a href="{% url 'home' %}" class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
+            after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
+            after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+                Home
+            </a>
+
+            <a href="{% url 'products' %}" class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
+            after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
+            after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+                Shop
+            </a>
+
+            <a href="#about" class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
+            after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
+            after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+                About Us
+            </a>
+        </div>
+
+        <!-- Cart Button -->
+        <div>
+            <a href="{% url 'cart_detail' %}"
+                class="bg-black text-white py-2 px-4 rounded-xl flex items-center gap-2 
+            hover:bg-gray-900 transition-all duration-300 transform hover:scale-105 shadow-md motion-safe:animate-bounce">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+        </div>
+    </nav>
+
+    <!-- page-content -->
+    <section
+        class="flex flex-col items-center justify-end h-screen bg-[url(/static/images/Mo.jpeg)] bg-cover bg-[center_bottom_-10px] animate-floating p-36">
+        <a href="{% url 'products' %}" class="relative inline-block px-8 py-3 text-black font-bold rounded-full 
+                bg-white hover:bg-black hover:text-white 
+                shadow-lg hover:shadow-2xl transform hover:scale-105 
+                transition-all duration-300 border-2 border-black ml-4 motion-safe:animate-bounce">
+            Start Shopping
+        </a>
+    </section>
+
+    <!-- About page -->
+    <section class="py-24 px-8" id="about">
+        <div class="container mx-auto max-w-6xl">
+            <!-- العنوان -->
+            <h2 class="text-5xl font-bold text-center text-black mb-12 animate-fade-in">
+                About Us
+            </h2>
+
+            <div class="flex flex-col md:flex-row items-center gap-16">
+                <!-- النص التعريفي -->
+                <div class="w-full md:w-1/2 space-y-6">
+                    <h3 class="text-3xl font-bold text-gray-900">
+                        Discover Clear Vision with MO-OPTICS
+                    </h3>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        At <span class="font-bold text-black">MO-OPTICS</span>, we're dedicated to transforming your
+                        vision with precision-crafted eyewear designed for both comfort and style.
+                    </p>
+
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        With years of expertise in the optical industry, our experienced team is committed to helping
+                        you
+                        find the perfect pair of glasses that enhance your vision and complement your personal style.
+                    </p>
+
+                    <p class="text-lg text-black font-bold">
+                        Visit MO-OPTICS today and experience eyewear excellence firsthand!
+                    </p>
+                </div>
+
+                <!-- الصورة -->
+                <div class="w-full md:w-1/2">
+                    <img src="/static/images/aboutus.jpeg" alt="Our Team"
+                        class="rounded-2xl shadow-xl w-full h-96 object-cover transform transition duration-300 hover:scale-105"
+                        loading="lazy">
+                </div>
+            </div>
+
+            <!-- أيقونات المزايا -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-12 mt-16">
+                <div class="text-center space-y-4">
+                    <i class="fa-solid fa-glasses text-6xl text-black"></i>
+                    <h4 class="text-2xl font-bold text-gray-900">Quality Glasses</h4>
+                    <p class="text-gray-600">Crafted with precision and designed for comfort.</p>
+                </div>
+
+                <div class="text-center space-y-4">
+                    <i class="fa-solid fa-heart text-6xl text-black"></i>
+                    <h4 class="text-2xl font-bold text-gray-900">Customer Care</h4>
+                    <p class="text-gray-600">We ensure you get the perfect fit with exceptional service.</p>
+                </div>
+
+                <div class="text-center space-y-4">
+                    <i class="fa-solid fa-truck-fast text-6xl text-black"></i>
+                    <h4 class="text-2xl font-bold text-gray-900">Fast Delivery</h4>
+                    <p class="text-gray-600">Enjoy speedy and reliable delivery across the country.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-8 px-8 text-center">
+        <div>
+            <div class="flex justify-center gap-6 mb-4">
+                <a href="https://www.instagram.com/m.o_optics?igsh=MTJ6aXpubnppYTExYg%3D%3D&utm_source=qr"
+                    class="text-white hover:text-gray-400 transition-transform transform hover:scale-110"
+                    target="_blank">
+                    <i class="fa-brands fa-instagram text-3xl"></i>
+                </a>
+                <a href="https://wa.me/201062654749?text=مرحبا، أريد الاستفسار عن خدماتكم."
+                    class="text-white hover:text-gray-400 transition-transform transform hover:scale-110"
+                    target="_blank">
+                    <i class="fa-brands fa-whatsapp text-3xl"></i>
+                </a>
+            </div>
+
+            <p class="font-bold text-lg">&copy; 2025 MO Store - All Rights Reserved</p>
+            <!-- Added Privacy Policy Link -->
+            <p class="text-sm text-gray-500 mt-4">
+                <a href="{% url 'privacy_policy' %}" class="text-white hover:text-gray-400 transition duration-300">
+                    Privacy Policy
+                </a>
+            </p>
+            <p class="text-sm text-gray-500 mt-2">
+                <a href="https://my-portfolio-59ne.onrender.com/" target="_blank"
+                    class="text-white font-semibold hover:text-gray-400 transition duration-300">
+                    Designed by: Mohanad Ahmed Khalil
+                </a>
+            </p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

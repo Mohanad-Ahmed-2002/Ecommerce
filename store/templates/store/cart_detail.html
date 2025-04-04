@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <title>Shopping Cart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-50 min-h-screen flex flex-col bg-[url(/static/images/background2.jpeg)] bg-cover bg-[center_bottom_-10px]"">
+
+    <div class="flex-grow">
+        <nav class="bg-white shadow-md py-3 px-6 flex justify-between items-center border-b border-gray-300">
+            <!-- Logo Section -->
+            <div class="w-12">
+                <a href="{% url 'home' %}">
+                    <img src="/static/images/MO log.jpeg
+                        " alt="Logo" class="object-contain rounded-lg motion-safe:animate-bounce">
+                </a>
+            </div>
+        
+            <!-- Navigation Links -->
+            <div class="flex gap-12">
+                <a href="{% url 'home' %}" class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
+                    after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
+                    after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+                    Home
+                </a>
+        
+                <a href="{% url 'products' %}" class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
+                    after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
+                    after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+                    Shop
+                </a>
+        
+                <!-- <a href="#about" class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
+                    after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
+                    after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+                    About Us
+                </a> -->
+            </div>
+        
+            <!-- Cart Button -->
+            <div>
+                <a href="{% url 'cart_detail' %}"
+                    class="bg-black text-white py-2 px-4 rounded-xl flex items-center gap-2 
+                    hover:bg-gray-900 transition-all duration-300 transform hover:scale-105 shadow-md motion-safe:animate-bounce">
+                    <i class="fas fa-shopping-cart"></i>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Cart -->
+        <div class="container mx-auto p-8">
+            <h1 class="text-4xl font-bold text-Black mb-8 text-center">Your Shopping Cart</h1>
+
+            {% if cart_items %}
+            <div class="bg-white shadow-md rounded-lg p-6 space-y-4">
+                {% for item in cart_items %}
+                <div class="flex items-center gap-4 p-4 border rounded-lg shadow-sm">
+                    <img src="{{ item.product.images.url }}" alt="{{ item.product.name }}" class="w-20 h-20 rounded-lg">
+                    <div class="flex-grow">
+                        <h3 class="text-xl font-bold">{{ item.product.name }}</h3>
+                        <p class="text-black">Quantity: {{ item.quantity }}</p>
+                        <p class="text-black font-semibold">Price: LE {{ item.get_total_price }}</p>
+                    </div>
+
+                    <div class="flex gap-4 items-center">
+                        <a href="{% url 'increase_quantity' item.id %}"
+                            class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 font-bold">+
+                        </a>
+                        <a href="{% url 'decrease_quantity' item.id %}"
+                            class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">-</a>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="text-right mt-6">
+                    <h2 class="text-3xl font-bold text-black ">Total: LE {{ total_price }}</h2>
+                </div>
+                <div class="text-right mt-6 animate-pulse">
+                    <a href="{% url 'checkout' %}" class="bg-black text-white px-6 py-3 rounded-lg  font-bold ">
+                        Checkout
+                    </a>
+                </div>
+
+            </div>
+            {% else %}
+            <p class="text-center text-gray-500">Your cart is empty.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-8 px-8 text-center">
+        <div>
+            <div class="flex justify-center gap-6 mb-4">
+                </a>
+                <a href="https://www.instagram.com/m.o_optics?igsh=MTJ6aXpubnppYTExYg%3D%3D&utm_source=qr"
+                    class="text-white hover:text-gray-400 transition-transform transform hover:scale-110" target="_blank">
+                    <i class="fa-brands fa-instagram text-3xl"></i>
+                </a>
+                <a href="https://wa.me/201062654749?text=مرحبا، أريد الاستفسار عن خدماتكم."
+                    class="text-white hover:text-gray-400 transition-transform transform hover:scale-110" target="_blank">
+                    <i class="fa-brands fa-whatsapp text-3xl"></i>
+                </a>
+            </div>
+    
+            <p class="font-bold text-lg">&copy; 2025 MO Store - All Rights Reserved</p>
+            <!-- Added Privacy Policy Link -->
+            <p class="text-sm text-gray-500 mt-4">
+                <a href="{% url 'privacy_policy' %}" class="text-white hover:text-gray-400 transition duration-300">
+                    Privacy Policy
+                </a>
+            </p>
+            <p class="text-sm text-gray-500 mt-2">
+                <a href="https://my-portfolio-59ne.onrender.com/" target="_blank"
+                    class="text-white font-semibold hover:text-gray-400 transition duration-300">
+                    Designed by: Mohanad Ahmed Khalil
+                </a>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>

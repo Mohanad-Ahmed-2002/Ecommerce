@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <title>Checkout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body
+    class="bg-gray-50 min-h-screen flex flex-col bg-[url(/static/images/background2.jpeg)] bg-cover bg-[center_bottom_-10px]">
+
+    <div class="flex-grow">
+        <!-- Navbar -->
+        <nav class="bg-white shadow-lg py-4 px-8 flex justify-between items-center border-b border-gray-300">
+            <!-- Logo Section -->
+            <div class="w-16">
+                <a href="{% url 'home' %}">
+                    <img src="/static/images/MO log.jpeg" alt="Logo"
+                        class="object-contain rounded-lg hover:scale-105 transition-transform duration-300 motion-safe:animate-bounce">
+                </a>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="flex gap-10">
+                <a href="{% url 'home' %}"
+                    class="relative text-gray-800 font-medium hover:text-black transition-all duration-300 after:block after:h-0.5 after:bg-black after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300">Home</a>
+                <a href="{% url 'products' %}"
+                    class="relative text-gray-800 font-medium hover:text-black transition-all duration-300 after:block after:h-0.5 after:bg-black after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300">Shop</a>
+            </div>
+
+            <!-- Cart Button -->
+            <div>
+                <a href="{% url 'cart_detail' %}"
+                    class="bg-black text-white py-2 px-5 rounded-lg flex items-center gap-2 hover:bg-gray-900 transition-all duration-300 transform hover:scale-105 shadow-md motion-safe:animate-bounce">
+                    <i class="fas fa-shopping-cart"></i>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Checkout Section -->
+        <div class="container mx-auto p-10">
+            <h1 class="text-4xl font-bold text-black mb-8 text-center">Checkout</h1>
+
+            <div class="bg-white shadow-lg rounded-lg p-8 space-y-6">
+                <h2 class="text-2xl font-semibold text-black">Order Details</h2>
+
+                <!-- Product Details -->
+                <div class="space-y-6">
+                    {% for item in cart_items %}
+                    <div class="flex justify-between items-center border-b pb-3 p-4 shadow-md bg-gray-100 rounded-lg">
+                        <div>
+                            <p class="font-semibold">{{ item.product.name }}</p>
+                            <p class="text-sm text-gray-500">Quantity: {{ item.quantity }}</p>
+                        </div>
+                        <p class="font-bold text-lg">LE {{ item.total_price }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Form -->
+                <form method="POST" class="space-y-4">
+                    {% csrf_token %}
+                    <div class="space-y-3">
+                        <label for="id_name" class="font-semibold">Name:</label>
+                        {{ form.name }}
+                    </div>
+                    <div class="space-y-3">
+                        <label for="id_email" class="font-semibold">Email:</label>
+                        {{ form.email }}
+                    </div>
+                    <div class="space-y-3">
+                        <label for="id_address" class="font-semibold">Address:</label>
+                        {{ form.address }}
+                    </div>
+                    <div class="space-y-3">
+                        <label for="id_phone" class="font-semibold">Phone:</label>
+                        {{ form.phone }}
+                    </div>
+
+                    <div class="space-y-3">
+                        <label for="id_governorate" class="font-semibold">Governorate:</label>
+                        <select name="government" id="government" onchange="updateTotals()">
+                            <option value="">Select Governorate</option>
+                            {% for gov in governments %}
+                            <option value="{{ gov.id }}" data-shipping-fee="{{ gov.shipping_fee }}">
+                                {{ gov.name }} - Shipping: LE {{ gov.shipping_fee }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <script>
+                        // دالة لتحديث القيم بناءً على التغيير
+                        function updateTotals() {
+                            var selectElement = document.getElementById('government');
+                            var selectedOption = selectElement.options[selectElement.selectedIndex];
+
+                            // جلب رسوم الشحن من الـ data-attribute
+                            var shippingFee = selectedOption.getAttribute('data-shipping-fee');
+
+                            // التأكد من أن قيمة Subtotal هي قيمة صحيحة قابلة للحساب
+                            var subtotal = parseFloat("{{ subtotal }}");
+                            if (isNaN(subtotal)) {
+                                subtotal = 0;
+                            }
+
+                            // التأكد من أن قيمة shippingFee صحيحة
+                            shippingFee = parseFloat(shippingFee);
+                            if (isNaN(shippingFee)) {
+                                shippingFee = 0;
+                            }
+
+                            // حساب Total
+                            var total = subtotal + shippingFee;
+
+                            // تحديث القيم في الصفحة
+                            document.getElementById('subtotal').innerText = 'LE ' + subtotal.toFixed(2);
+                            document.getElementById('shipping').innerText = 'LE ' + shippingFee.toFixed(2);
+                            document.getElementById('total').innerText = 'LE ' + total.toFixed(2);
+                        }
+
+                        // استدعاء الدالة عند تحميل الصفحة لتحديث القيم بناءً على الاختيار الافتراضي
+                        window.onload = function () {
+                            updateTotals();
+                        }
+                    </script>
+
+                    <div class="border-t pt-4 space-y-2">
+                        <p class="text-lg font-semibold">Subtotal: <span id="subtotal" class="font-bold">LE {{ subtotal
+                                }}</span></p>
+                        <p class="text-lg font-semibold">Shipping: <span id="shipping" class="font-bold">LE {{
+                                shipping_fee }}</span>
+                        </p>
+                        <h3 class="text-xl font-bold">Total Price: <span id="total">LE {{ grand_total }}</span></h3>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button type="submit"
+                            class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 font-bold transition duration-300 ease-in-out transform hover:scale-105 animate-pulse">Confirm
+                            Order</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-6 px-6 text-center">
+        <div class="flex justify-center gap-6 mb-4">
+            <a href="https://www.instagram.com/m.o_optics?igsh=MTJ6aXpubnppYTExYg%3D%3D&utm_source=qr"
+                class="text-white hover:text-gray-400 transition-transform transform hover:scale-110" target="_blank">
+                <i class="fa-brands fa-instagram text-3xl"></i>
+            </a>
+            <a href="https://wa.me/201062654749?text=مرحبا، أريد الاستفسار عن خدماتكم."
+                class="text-white hover:text-gray-400 transition-transform transform hover:scale-110" target="_blank">
+                <i class="fa-brands fa-whatsapp text-3xl"></i>
+            </a>
+        </div>
+        <p class="font-bold text-lg">&copy; 2025 MO Store - All Rights Reserved</p>
+        <p class="text-sm text-gray-500 mt-4">
+            <a href="{% url 'privacy_policy' %}" class="text-white hover:text-gray-400 transition duration-300">
+                Privacy Policy
+            </a>
+        </p>
+        <p class="text-sm text-gray-500 mt-2">
+            <a href="https://my-portfolio-59ne.onrender.com/" target="_blank"
+                class="text-white font-semibold hover:text-gray-400 transition duration-300">Designed by: Mohanad Ahmed
+                Khalil</a>
+        </p>
+    </footer>
+</body>
+
+</html>

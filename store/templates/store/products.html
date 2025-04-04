@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <title>Products - Eyewear Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body
+    class="bg-gray-100 min-h-screen flex flex-col bg-[url(/static/images/background2.jpeg)] bg-cover bg-[center_bottom_-10px]">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md py-3 px-6 flex justify-between items-center border-b border-gray-300">
+        <!-- Logo Section -->
+        <div class="w-12">
+            <a href="{% url 'home' %}">
+                <img src="/static/images/MO log.jpeg" alt="Logo"
+                    class="object-contain rounded-lg motion-safe:animate-bounce">
+            </a>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="flex gap-12">
+            <a href="{% url 'home' %}"
+                class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
+                after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
+                after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+                Home
+            </a>
+
+            <a href="{% url 'products' %}"
+                class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
+                after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
+                after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+                Shop
+            </a>
+        </div>
+
+        <!-- Cart Button -->
+        <div>
+            <a href="{% url 'cart_detail' %}"
+                class="bg-black text-white py-2 px-4 rounded-xl flex items-center gap-2 
+                hover:bg-gray-900 transition-all duration-300 transform hover:scale-105 shadow-md motion-safe:animate-bounce">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Filter Section -->
+    <div class="bg-white shadow-md p-6 rounded-lg max-w-4xl mx-auto mt-8">
+        <form method="GET" action="{% url 'products' %}" class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div>
+                <label class="block text-black font-bold mb-2">
+                    <i class="fas fa-dollar-sign text-black"></i> Price
+                </label>
+                <select name="price"
+                    class="w-full border border-black rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-black transition">
+                    <option value="">All Prices</option>
+                    <option value="low">Under LE 500</option>
+                    <option value="mid">LE 500 - LE 1000</option>
+                    <option value="high">Above LE 1000</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-black font-bold mb-2">
+                    <i class="fas fa-list text-black"></i> Category
+                </label>
+                <select name="category"
+                    class="w-full border border-black rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-black transition">
+                    <option value="">All Categories</option>
+                    <option value="Sunglasses">Sunglasses</option>
+                    <option value="Eyeglasses">Eyeglasses</option>
+                    <option value="Contact Lenses">Contact Lenses</option>
+                </select>
+            </div>
+
+            <div class="flex items-end">
+                <button type="submit"
+                    class="bg-black text-white w-full py-3 px-4 rounded-lg hover:scale-105 transition duration-300 shadow-md relative overflow-hidden">
+                    <i class="fas fa-filter hover:rotate-180 transition-transform duration-300"></i>
+                    Filter
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Add a gap or separator between filters and products -->
+    <div class="my-8"></div>
+
+    <!-- Products Section -->
+    <div class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 flex-grow">
+        {% for product in products %}
+        <div
+            class="bg-white rounded-xl shadow-md border border-black-300 p-4 hover:shadow-2xl transform hover:scale-105 transition duration-300">
+            <a href="{% url 'product_detail' product.id %}">
+                <img src="{{ product.images.url }}" alt="{{ product.name }}"
+                    class="rounded-lg w-full h-60 object-cover aspect-square hover:shadow-lg transition duration-300">
+            </a>
+
+            <h3 class="text-xl font-bold text-black mt-4">
+                <a href="{% url 'product_detail' product.id %}" class="hover:text-black transition">
+                    {{ product.name }}
+                </a>
+            </h3>
+
+            <p class="text-black font-semibold mt-2">LE {{ product.price }}</p>
+
+            <form method="POST" action="{% url 'add_to_cart' product.id %}">
+                {% csrf_token %}
+                <button type="submit"
+                    class="add-to-cart-btn font-bold bg-black text-white w-full py-2 mt-4 rounded-lg flex items-center justify-center gap-2 animate-pulse transition relative overflow-hidden transition-all duration-300">
+                    <i class="fas fa-shopping-cart animate-bounce"></i>
+                    Add to Cart
+                </button>
+                <!-- toast_notification by AI -->
+                <div id="toast-message"
+                    class="hidden fixed top-20 left-1/2 transform -translate-x-1/2 bg-black-700 text-white py-3 px-6 rounded-lg shadow-lg animate-slide-in">
+                    <i class="fas fa-check-circle mr-2"></i> Product added to cart!
+                </div>
+                <!-- CSS -->
+                <style>
+                    .animate-slide-in {
+                        animation: slide-in 0.5s ease-out forwards;
+                    }
+
+                    .animate-fade-out {
+                        animation: fade-out 1s ease-out forwards;
+                    }
+
+                    @keyframes slide-in {
+                        from {
+                            opacity: 0;
+                            transform: translateY(-20px);
+                        }
+
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    }
+
+                    @keyframes fade-out {
+                        from {
+                            opacity: 1;
+                        }
+
+                        to {
+                            opacity: 0;
+                        }
+                    }
+                </style>
+                <!-- JavaScript -->
+                <script>
+                    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                        button.addEventListener('click', function (e) {
+                            const toast = document.getElementById('toast-message');
+                            toast.classList.remove('hidden');
+                            toast.classList.add('animate-slide-in');
+
+                            setTimeout(() => {
+                                toast.classList.remove('animate-slide-in');
+                                toast.classList.add('animate-fade-out');
+
+                                setTimeout(() => {
+                                    toast.classList.add('hidden');
+                                }, 1000); // وقت تلاشي الرسالة
+                            }, 10000); // تظهر الرسالة لمدة 10 ثوانٍ
+                        });
+                    });
+                </script>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-8 px-8 text-center">
+        <div>
+            <div class="flex justify-center gap-6 mb-4">
+                <a href="https://www.instagram.com/m.o_optics?igsh=MTJ6aXpubnppYTExYg%3D%3D&utm_source=qr"
+                    class="text-white hover:text-gray-400 transition-transform transform hover:scale-110"
+                    target="_blank">
+                    <i class="fa-brands fa-instagram text-3xl"></i>
+                </a>
+                <a href="https://wa.me/201062654749?text=مرحبا، أريد الاستفسار عن خدماتكم."
+                    class="text-white hover:text-gray-400 transition-transform transform hover:scale-110"
+                    target="_blank">
+                    <i class="fa-brands fa-whatsapp text-3xl"></i>
+                </a>
+            </div>
+
+            <p class="font-bold text-lg">&copy; 2025 MO Store - All Rights Reserved</p>
+            <p class="text-sm text-gray-500 mt-4">
+                <a href="{% url 'privacy_policy' %}" class="text-white hover:text-gray-400 transition duration-300">
+                    Privacy Policy
+                </a>
+            </p>
+            <p class="text-sm text-gray-500 mt-2">
+                <a href="https://my-portfolio-59ne.onrender.com/" target="_blank"
+                    class="text-white font-semibold hover:text-gray-400 transition duration-300">
+                    Designed by: Mohanad Ahmed Khalil
+                </a>
+            </p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

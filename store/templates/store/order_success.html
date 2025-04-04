@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Success</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-50 min-h-screen flex flex-col bg-[url(/static/images/background2.jpeg)] bg-cover bg-[center_bottom_-10px]">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md py-3 px-6 flex justify-between items-center border-b border-gray-300">
+        <!-- Logo Section -->
+        <div class="w-12">
+            <a href="{% url 'home' %}">
+                <img src="/static/images/MO log.jpeg" alt="Logo"
+                    class="object-contain rounded-lg motion-safe:animate-bounce">
+            </a>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="flex gap-12">
+            <a href="{% url 'home' %}"
+                class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
+                after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
+                after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+                Home
+            </a>
+
+            <a href="{% url 'products' %}"
+                class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
+                after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
+                after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+                Shop
+            </a>
+        </div>
+
+        <!-- Cart Button -->
+        <div>
+            <a href="{% url 'home' %}"
+                class="bg-black text-white py-2 px-4 rounded-xl flex items-center gap-2 
+                hover:bg-gray-900 transition-all duration-300 transform hover:scale-105 shadow-md motion-safe:animate-bounce">
+                Back To Home
+            </a>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container mx-auto py-12 text-center flex-grow">
+        <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6">
+            <h1 class="text-2xl font-bold text-black mb-4">🎉 Your Order Has Been Placed Successfully! 🎉</h1>
+
+            <p class="text-black mb-2">📌 <strong>Order ID:</strong> #{{ order.id }}</p>
+
+            <p class="text-black mb-2">💰 <strong>Total Price:</strong> LE {{ order.total_price }}</p>
+
+            <ul class="text-gray-700">
+                {% for item in order_items %}
+                <li class="mb-2">
+                    🏷️ <strong>{{ item.product.name }}</strong> - Quantity: {{ item.quantity }} - Price: ${{
+                    item.product.price }}
+                </li>
+                {% endfor %}
+            </ul>
+
+            <p class="text-lg text-gray-600 mt-4">Thank you for shopping with us! 😊</p>
+
+            <a href="{% url 'products' %}"
+                class="mt-6 inline-block bg-black animate-pulse text-white px-4 py-2 rounded-lg shadow-md  transition duration-300">
+                🛍️ Continue Shopping
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-8 px-8 text-center mt-auto">
+        <div>
+            <div class="flex justify-center gap-6 mb-4">
+                <a href="https://www.instagram.com/m.o_optics?igsh=MTJ6aXpubnppYTExYg%3D%3D&utm_source=qr"
+                    class="text-white hover:text-gray-400 transition-transform transform hover:scale-110"
+                    target="_blank">
+                    <i class="fa-brands fa-instagram text-3xl"></i>
+                </a>
+                <a href="https://wa.me/201062654749?text=مرحبا، أريد الاستفسار عن خدماتكم."
+                    class="text-white hover:text-gray-400 transition-transform transform hover:scale-110"
+                    target="_blank">
+                    <i class="fa-brands fa-whatsapp text-3xl"></i>
+                </a>
+            </div>
+
+            <p class="font-bold text-lg">&copy; 2025 MO Store - All Rights Reserved</p>
+            <!-- Added Privacy Policy Link -->
+            <p class="text-sm text-gray-500 mt-4">
+                <a href="{% url 'privacy_policy' %}" class="text-white hover:text-gray-400 transition duration-300">
+                    Privacy Policy
+                </a>
+            </p>
+            <p class="text-sm text-gray-500 mt-2">
+                <a href="https://my-portfolio-59ne.onrender.com/" target="_blank"
+                    class="text-white font-semibold hover:text-gray-400 transition duration-300">
+                    Designed by: Mohanad Ahmed Khalil
+                </a>
+            </p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
