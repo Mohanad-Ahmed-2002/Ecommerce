@@ -1,1 +1,1 @@
-web: uvicorn EcommerceStore.asgi:application --host 0.0.0.0 --port 8000
+web: gunicorn EcommerceStore.asgi:application --bind 0.0.0.0:8000
