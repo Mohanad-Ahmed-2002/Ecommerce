@@ -1,1 +1,1 @@
-web: daphne EcommerceStore.asgi:application --host 0.0.0.0 --port 8000
+web: gunicorn -k uvicorn.workers.UvicornWorker EcommerceStore.asgi:application
