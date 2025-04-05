@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: ecommerce-store
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn -k uvicorn.workers.UvicornWorker EcommerceStore.asgi:application"
+    deploy:
+      automatic: true
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        value: "django-insecure-tsx(#-!4q^=#h$8%tgyo-sth22v-4=lkyh55f3$hqnx8e9rrag"  # مفتاح السري الذي ذكرته
+      - key: DB_HOST
+        value: "dpg-cvns4mjuibrs73ad6st0-a.oregon-postgres.render.com"  # عنوان قاعدة البيانات
+      - key: DB_USER
+        value: "mo"  # اسم المستخدم لقاعدة البيانات
+      - key: DB_NAME
+        value: "ecommerce_wnz4"  # اسم قاعدة البيانات
+      - key: DB_PASSWORD
+        value: "qL9MFlNQXpvhnPaN9w1Ck9sdJMYazs8i"  # كلمة مرور قاعدة البيانات
+      - key: DB_PORT
+        value: "5432"  # المنفذ الخاص بقاعدة البيانات (عادة 5432 لـ PostgreSQL)
+    build:
+      commands:
+        - python manage.py collectstatic --noinput  # جمع ملفات static
+        - python manage.py migrate --noinput  # تنفيذ الترحيلات الخاصة بقاعدة البيانات
