@@ -1,1 +1,1 @@
-web: gunicorn EcommerceStore.wsgi
+web: gunicorn -k uvicorn.workers.UvicornWorker EcommerceStore.asgi:application
