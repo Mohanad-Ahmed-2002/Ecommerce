@@ -129,15 +129,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
+# إعدادات الـ Static
 STATIC_URL = '/static/'
 
+# في حالة نشر المشروع على منصة مثل Render، ستحتاج إلى إعداد مسار الـ STATICFILES_DIRS إذا كان لديك ملفات Static مخصصة
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    BASE_DIR / "static",
 ]
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# إضافة مسار لتخزين الملفات المجمعة بعد التحزيم (collectstatic)
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
