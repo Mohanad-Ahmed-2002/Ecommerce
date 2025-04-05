@@ -5,6 +5,7 @@
 <head>
     <title>{% block title %}MA Store{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -16,7 +17,7 @@
         <!-- Logo Section -->
         <div class="w-12">
             <a href="{% url 'home' %}">
-                <img src="/static/images/MO log.jpeg" alt="Logo"
+                <img src="{% static 'images/MO log.jpeg' %}" alt="Logo"
                     class="object-contain rounded-lg motion-safe:animate-bounce">
             </a>
         </div>
