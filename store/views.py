@@ -43,7 +43,7 @@ def product_detail(request,product_id):
     return render(request, 'store/product_detail.html', {'product': product})
 
 def cart_detail(request):
-    cart_items = CartItem.objects.all()
+    cart_items = CartItem.objects.filter(user=request.user)
     total_price = sum(item.get_total_price() for item in cart_items)
     context = {
         'cart_items': cart_items,
@@ -56,7 +56,7 @@ def add_to_cart(request, product_id):
         product = get_object_or_404(Product, id=product_id)
 
         # التحقق إذا كان المنتج موجود بالفعل في السلة
-        cart_item, created = CartItem.objects.get_or_create(product=product)
+        cart_item, created = CartItem.objects.get_or_create(product=product, user=request.user)
     
         if not created:
             cart_item.quantity += 1

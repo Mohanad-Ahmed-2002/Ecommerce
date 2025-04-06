@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django import forms
 
+
 # Create your models here.
 
 class Category(models.Model):
@@ -25,7 +26,8 @@ class Product(models.Model):
         return self.name
 
 class CartItem(models.Model):
-
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     product=models.ForeignKey(Product,on_delete=models.CASCADE)
     quantity=models.PositiveIntegerField(default=1)
 
@@ -34,7 +36,7 @@ class CartItem(models.Model):
     
     def __str__(self):
         return f"{self.product.name} - {self.quantity}"
-    
+
 class Government(models.Model):
     name=models.CharField(max_length=100)
     shipping_fee = models.DecimalField(max_digits=10,decimal_places=2)

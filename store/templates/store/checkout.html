@@ -12,49 +12,55 @@
 <body
     class="bg-gray-100 min-h-screen flex flex-col bg-[url(/static/images/background2.jpeg)] bg-cover bg-[center_bottom_-10px]">
 
-        <!-- Navbar -->
-        <nav class="bg-white shadow-lg py-4 px-8 flex justify-between items-center border-b border-gray-300">
-            <!-- Logo Section -->
-            <div class="w-16">
-                <a href="{% url 'home' %}">
-                    <img src="/static/images/MO log.jpeg" alt="Logo"
-                        class="object-contain rounded-lg hover:scale-105 transition-transform duration-300 motion-safe:animate-bounce">
-                </a>
-            </div>
-
-            <!-- Navigation Links -->
-            <div class="flex gap-10">
-                <a href="{% url 'home' %}"
-                    class="relative text-gray-800 font-medium hover:text-black transition-all duration-300 after:block after:h-0.5 after:bg-black after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300">Home</a>
-                <a href="{% url 'products' %}"
-                    class="relative text-gray-800 font-medium hover:text-black transition-all duration-300 after:block after:h-0.5 after:bg-black after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300">Shop</a>
-            </div>
-
+    <nav class="bg-white shadow-md py-3 px-6 flex justify-between items-center border-b border-gray-300 fixed w-full z-50">
+        <div class="w-12">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'images/MO log.jpeg' %}" alt="Logo"
+                    class="object-contain rounded-lg motion-safe:animate-bounce">
+            </a>
+        </div>
+    
+        <!-- Navigation Links for large screens -->
+        <div class="hidden lg:flex gap-12">
+            <a href="{% url 'home' %}" class="relative text-black font-medium hover:text-gray-800">Home</a>
+            <a href="{% url 'products' %}" class="relative text-black font-medium hover:text-gray-800">Shop</a>
+        </div>
+    
+        <!-- Cart and Mobile Menu button -->
+        <div class="flex items-center gap-4">
             <!-- Cart Button -->
             <div>
                 <a href="{% url 'cart_detail' %}"
-                    class="bg-black text-white py-2 px-5 rounded-lg flex items-center gap-2 hover:bg-gray-900 transition-all duration-300 transform hover:scale-105 shadow-md motion-safe:animate-bounce">
+                    class="bg-black text-white py-2 px-4 rounded-xl flex items-center gap-2 hover:bg-gray-900">
                     <i class="fas fa-shopping-cart"></i>
                 </a>
             </div>
-        </nav>
-
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="lg:hidden fixed top-0 left-0 w-full h-full bg-white z-40 hidden">
-            <div class="flex justify-end p-4">
-                <button id="close-menu-button" class="text-black">
-                    <i class="fas fa-times text-2xl"></i>
+    
+            <!-- Mobile menu button -->
+            <div class="block lg:hidden">
+                <button id="mobile-menu-button" class="text-black focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
                 </button>
             </div>
-            <div class="flex flex-col items-center gap-8 py-12">
-                <a href="{% url 'home' %}" class="text-xl text-black hover:text-gray-800">Home</a>
-                <a href="{% url 'products' %}" class="text-xl text-black hover:text-gray-800">Shop</a>
-            </div>
         </div>
+    </nav>
+    
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="lg:hidden fixed top-0 left-0 w-full h-full bg-white z-40 hidden">
+        <div class="flex justify-end p-4">
+            <button id="close-menu-button" class="text-black">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
+        <div class="flex flex-col items-center gap-8 py-12">
+            <a href="{% url 'home' %}" class="text-xl text-black hover:text-gray-800">Home</a>
+            <a href="{% url 'products' %}" class="text-xl text-black hover:text-gray-800">Shop</a>
+        </div>
+    </div>
 
         <!-- Checkout Section -->
-        <div class="container mx-auto p-10 justify-center">
-            <h1 class="text-4xl font-bold text-black mb-8 text-center">Checkout</h1>
+        <div class="container mx-auto p-12 justify-center">
+            <h1 class="text-4xl font-bold p-6  text-black mb-8 text-center">Checkout</h1>
 
             <div class="bg-white shadow-lg rounded-lg p-8 space-y-6">
                 <h2 class="text-2xl font-semibold text-black">Order Details</h2>
