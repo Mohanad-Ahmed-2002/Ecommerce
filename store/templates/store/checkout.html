@@ -10,9 +10,8 @@
 </head>
 
 <body
-    class="bg-gray-50 min-h-screen flex flex-col bg-[url(/static/images/background2.jpeg)] bg-cover bg-[center_bottom_-10px]">
+    class="bg-gray-100 min-h-screen flex flex-col bg-[url(/static/images/background2.jpeg)] bg-cover bg-[center_bottom_-10px]">
 
-    <div class="flex-grow">
         <!-- Navbar -->
         <nav class="bg-white shadow-lg py-4 px-8 flex justify-between items-center border-b border-gray-300">
             <!-- Logo Section -->
@@ -40,8 +39,21 @@
             </div>
         </nav>
 
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="lg:hidden fixed top-0 left-0 w-full h-full bg-white z-40 hidden">
+            <div class="flex justify-end p-4">
+                <button id="close-menu-button" class="text-black">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="flex flex-col items-center gap-8 py-12">
+                <a href="{% url 'home' %}" class="text-xl text-black hover:text-gray-800">Home</a>
+                <a href="{% url 'products' %}" class="text-xl text-black hover:text-gray-800">Shop</a>
+            </div>
+        </div>
+
         <!-- Checkout Section -->
-        <div class="container mx-auto p-10">
+        <div class="container mx-auto p-10 justify-center">
             <h1 class="text-4xl font-bold text-black mb-8 text-center">Checkout</h1>
 
             <div class="bg-white shadow-lg rounded-lg p-8 space-y-6">
@@ -149,7 +161,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-black text-white py-6 px-6 text-center">
+    <footer class="bg-black text-white py-6 px-6 text-center mt-auto">
         <div class="flex justify-center gap-6 mb-4">
             <a href="https://www.instagram.com/m.o_optics?igsh=MTJ6aXpubnppYTExYg%3D%3D&utm_source=qr"
                 class="text-white hover:text-gray-400 transition-transform transform hover:scale-110" target="_blank">
@@ -172,6 +184,22 @@
                 Khalil</a>
         </p>
     </footer>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMenuButton = document.getElementById('close-menu-button');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        closeMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+        });
+    </script>
+
 </body>
 
 </html>
