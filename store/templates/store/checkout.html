@@ -31,7 +31,7 @@
             <!-- Cart Button -->
             <div>
                 <a href="{% url 'cart_detail' %}"
-                    class="bg-black text-white py-2 px-4 rounded-xl flex items-center gap-2 hover:bg-gray-900">
+                    class="bg-black text-white py-2 px-4 rounded-xl flex items-center gap-2 hover:bg-gray-900 motion-safe:animate-bounce">
                     <i class="fas fa-shopping-cart"></i>
                 </a>
             </div>
@@ -104,7 +104,7 @@
                             <option value="">Select Governorate</option>
                             {% for gov in governments %}
                             <option value="{{ gov.id }}" data-shipping-fee="{{ gov.shipping_fee }}">
-                                {{ gov.name }} - Shipping: LE {{ gov.shipping_fee }}
+                                {{ gov.name }} 
                             </option>
                             {% endfor %}
                         </select>

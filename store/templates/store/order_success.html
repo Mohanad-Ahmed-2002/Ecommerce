@@ -62,15 +62,6 @@
 
             <p class="text-black mb-2">💰 <strong>Total Price:</strong> LE {{ order.total_price }}</p>
 
-            <ul class="text-gray-700">
-                {% for item in order_items %}
-                <li class="mb-2">
-                    🏷️ <strong>{{ item.product.name }}</strong> - Quantity: {{ item.quantity }} - Price: ${{
-                    item.product.price }}
-                </li>
-                {% endfor %}
-            </ul>
-
             <p class="text-lg text-gray-600 mt-4">Thank you for shopping with us! 😊</p>
 
             <a href="{% url 'products' %}"
