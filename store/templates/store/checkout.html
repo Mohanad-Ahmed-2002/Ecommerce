@@ -7,25 +7,28 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 </head>
 
 <body
     class="bg-gray-100 min-h-screen flex flex-col bg-[url(/static/images/background2.jpeg)] bg-cover bg-[center_bottom_-10px]">
 
-    <nav class="bg-white shadow-md py-3 px-6 flex justify-between items-center border-b border-gray-300 fixed w-full z-50">
+    <nav
+        class="bg-white shadow-md py-3 px-6 flex justify-between items-center border-b border-gray-300 fixed w-full z-50">
         <div class="w-12">
             <a href="{% url 'home' %}">
                 <img src="{% static 'images/MO log.jpeg' %}" alt="Logo"
                     class="object-contain rounded-lg motion-safe:animate-bounce">
             </a>
         </div>
-    
+
         <!-- Navigation Links for large screens -->
         <div class="hidden lg:flex gap-12">
             <a href="{% url 'home' %}" class="relative text-black font-medium hover:text-gray-800">Home</a>
             <a href="{% url 'products' %}" class="relative text-black font-medium hover:text-gray-800">Shop</a>
         </div>
-    
+
         <!-- Cart and Mobile Menu button -->
         <div class="flex items-center gap-4">
             <!-- Cart Button -->
@@ -35,7 +38,7 @@
                     <i class="fas fa-shopping-cart"></i>
                 </a>
             </div>
-    
+
             <!-- Mobile menu button -->
             <div class="block lg:hidden">
                 <button id="mobile-menu-button" class="text-black focus:outline-none">
@@ -44,7 +47,7 @@
             </div>
         </div>
     </nav>
-    
+
     <!-- Mobile Menu -->
     <div id="mobile-menu" class="lg:hidden fixed top-0 left-0 w-full h-full bg-white z-40 hidden">
         <div class="flex justify-end p-4">
@@ -58,111 +61,102 @@
         </div>
     </div>
 
-        <!-- Checkout Section -->
-        <div class="container mx-auto p-12 justify-center">
-            <h1 class="text-4xl font-bold p-6  text-black mb-8 text-center">Checkout</h1>
+    <!-- Checkout Section -->
+    <div class="container mx-auto p-12 justify-center">
+        <h1 class="text-4xl font-bold p-6 text-black mb-8 text-center">Checkout</h1>
 
-            <div class="bg-white shadow-lg rounded-lg p-8 space-y-6">
-                <h2 class="text-2xl font-semibold text-black">Order Details</h2>
+        <div class="bg-white shadow-lg rounded-lg p-8 space-y-6">
+            <h2 class="text-2xl font-semibold text-black">Order Details</h2>
 
-                <!-- Product Details -->
-                <div class="space-y-6">
-                    {% for item in cart_items %}
-                    <div class="flex justify-between items-center border-b pb-3 p-4 shadow-md bg-gray-100 rounded-lg">
-                        <div>
-                            <p class="font-semibold">{{ item.product.name }}</p>
-                            <p class="text-sm text-gray-500">Quantity: {{ item.quantity }}</p>
-                        </div>
-                        <p class="font-bold text-lg">LE {{ item.total_price }}</p>
+            <!-- Product Details -->
+            <div class="space-y-6">
+                {% for item in cart_items %}
+                <div class="flex justify-between items-center border-b pb-3 p-4 shadow-md bg-gray-100 rounded-lg">
+                    <div>
+                        <p class="font-semibold">{{ item.product.name }}</p>
+                        <p class="text-sm text-gray-500">Quantity: {{ item.quantity }}</p>
                     </div>
-                    {% endfor %}
+                    <p class="font-bold text-lg">LE {{ item.total_price }}</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Form -->
+            <form method="POST" class="space-y-4">
+                {% csrf_token %}
+                <div class="space-y-3">
+                    <label for="id_name" class="font-semibold">Name:</label>
+                    {{ form.name }}
+                </div>
+                <div class="space-y-3">
+                    <label for="id_email" class="font-semibold">Email:</label>
+                    {{ form.email }}
+                </div>
+                <div class="space-y-3">
+                    <label for="id_address" class="font-semibold">Address:</label>
+                    {{ form.address }}
+                </div>
+                <div class="space-y-3">
+                    <label for="id_phone" class="font-semibold">Phone:</label>
+                    {{ form.phone }}
                 </div>
 
-                <!-- Form -->
-                <form method="POST" class="space-y-4">
-                    {% csrf_token %}
-                    <div class="space-y-3">
-                        <label for="id_name" class="font-semibold">Name:</label>
-                        {{ form.name }}
-                    </div>
-                    <div class="space-y-3">
-                        <label for="id_email" class="font-semibold">Email:</label>
-                        {{ form.email }}
-                    </div>
-                    <div class="space-y-3">
-                        <label for="id_address" class="font-semibold">Address:</label>
-                        {{ form.address }}
-                    </div>
-                    <div class="space-y-3">
-                        <label for="id_phone" class="font-semibold">Phone:</label>
-                        {{ form.phone }}
-                    </div>
+                <div class="space-y-3">
+                    <label for="id_governorate" class="font-semibold">Governorate:</label>
+                    <select name="government" id="government" onchange="updateTotals()">
+                        <option value="">Select Governorate</option>
+                        {% for gov in governments %}
+                        <option value="{{ gov.id }}" data-shipping-fee="{{ gov.shipping_fee }}">
+                            {{ gov.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-                    <div class="space-y-3">
-                        <label for="id_governorate" class="font-semibold">Governorate:</label>
-                        <select name="government" id="government" onchange="updateTotals()">
-                            <option value="">Select Governorate</option>
-                            {% for gov in governments %}
-                            <option value="{{ gov.id }}" data-shipping-fee="{{ gov.shipping_fee }}">
-                                {{ gov.name }} 
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
+                <script>
+                    function updateTotals() {
+                        var selectElement = document.getElementById('government');
+                        var selectedOption = selectElement.options[selectElement.selectedIndex];
 
-                    <script>
-                        // دالة لتحديث القيم بناءً على التغيير
-                        function updateTotals() {
-                            var selectElement = document.getElementById('government');
-                            var selectedOption = selectElement.options[selectElement.selectedIndex];
+                        var shippingFee = selectedOption.getAttribute('data-shipping-fee');
 
-                            // جلب رسوم الشحن من الـ data-attribute
-                            var shippingFee = selectedOption.getAttribute('data-shipping-fee');
-
-                            // التأكد من أن قيمة Subtotal هي قيمة صحيحة قابلة للحساب
-                            var subtotal = parseFloat("{{ subtotal }}");
-                            if (isNaN(subtotal)) {
-                                subtotal = 0;
-                            }
-
-                            // التأكد من أن قيمة shippingFee صحيحة
-                            shippingFee = parseFloat(shippingFee);
-                            if (isNaN(shippingFee)) {
-                                shippingFee = 0;
-                            }
-
-                            // حساب Total
-                            var total = subtotal + shippingFee;
-
-                            // تحديث القيم في الصفحة
-                            document.getElementById('subtotal').innerText = 'LE ' + subtotal.toFixed(2);
-                            document.getElementById('shipping').innerText = 'LE ' + shippingFee.toFixed(2);
-                            document.getElementById('total').innerText = 'LE ' + total.toFixed(2);
+                        var subtotal = parseFloat("{{ subtotal }}");
+                        if (isNaN(subtotal)) {
+                            subtotal = 0;
                         }
 
-                        // استدعاء الدالة عند تحميل الصفحة لتحديث القيم بناءً على الاختيار الافتراضي
-                        window.onload = function () {
-                            updateTotals();
+                        shippingFee = parseFloat(shippingFee);
+                        if (isNaN(shippingFee)) {
+                            shippingFee = 0;
                         }
-                    </script>
 
-                    <div class="border-t pt-4 space-y-2">
-                        <p class="text-lg font-semibold">Subtotal: <span id="subtotal" class="font-bold">LE {{ subtotal
-                                }}</span></p>
-                        <p class="text-lg font-semibold">Shipping: <span id="shipping" class="font-bold">LE {{
-                                shipping_fee }}</span>
-                        </p>
-                        <h3 class="text-xl font-bold">Total Price: <span id="total">LE {{ grand_total }}</span></h3>
-                    </div>
+                        var total = subtotal + shippingFee;
 
-                    <div class="flex justify-end">
-                        <button type="submit"
-                            class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 font-bold transition duration-300 ease-in-out transform hover:scale-105 animate-pulse">Confirm
-                            Order</button>
-                    </div>
-                </form>
+                        document.getElementById('subtotal').innerText = 'LE ' + subtotal.toFixed(2);
+                        document.getElementById('shipping').innerText = 'LE ' + shippingFee.toFixed(2);
+                        document.getElementById('total').innerText = 'LE ' + total.toFixed(2);
+                    }
 
-            </div>
+                    window.onload = function () {
+                        updateTotals();
+                    }
+                </script>
+
+                <div class="border-t pt-4 space-y-2">
+                    <p class="text-lg font-semibold">Subtotal: <span id="subtotal" class="font-bold">LE {{ subtotal
+                            }}</span></p>
+                    <p class="text-lg font-semibold">Shipping: <span id="shipping" class="font-bold">LE {{ shipping_fee
+                            }}</span></p>
+                    <h3 class="text-xl font-bold">Total Price: <span id="total">LE {{ grand_total }}</span></h3>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit"
+                        class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 font-bold transition duration-300 ease-in-out transform hover:scale-105 animate-pulse">Confirm
+                        Order</button>
+                </div>
+            </form>
+
         </div>
     </div>
 
