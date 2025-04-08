@@ -194,4 +194,5 @@ def calculate_total_price(request):
     }
 
 def privacy_policy(request):    
+
     return render(request, 'store/privacy_policy.html')

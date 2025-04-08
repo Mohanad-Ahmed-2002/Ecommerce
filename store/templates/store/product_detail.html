@@ -50,7 +50,6 @@
             </div>
         </div>
     </nav>
-
     <!-- Mobile Menu -->
     <div id="mobile-menu" class="lg:hidden fixed top-0 left-0 w-full h-full bg-white z-40 hidden">
         <div class="flex justify-end p-4">
@@ -63,7 +62,6 @@
             <a href="{% url 'products' %}" class="text-xl text-black hover:text-gray-800">Shop</a>
         </div>
     </div>
-
     <!-- Product Detail Section -->
     <div class="max-w-4xl mx-auto mt-8 bg-white shadow-md p-8 rounded-lg">
         <img src="{{ product.images.url }}" alt="{{ product.name }}"
@@ -88,7 +86,6 @@
             </a>
         </div>
     </div>
-
     <!-- Footer -->
     <footer class="bg-black text-white py-8 px-8 text-center mt-auto">
         <div>
@@ -119,7 +116,6 @@
             </p>
         </div>
     </footer>
-
     <!-- Mobile Menu Script -->
     <script>
         const mobileMenuButton = document.getElementById('mobile-menu-button');

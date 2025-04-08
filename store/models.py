@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django import forms
+from cloudinary_storage.storage import MediaCloudinaryStorage
 
 
 # Create your models here.
@@ -16,13 +17,13 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-
 class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.FloatField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)  
-    images = models.ImageField(upload_to='products/')
+    images = models.ImageField(storage=MediaCloudinaryStorage(), upload_to='products/')
     product_code = models.CharField(max_length=50, unique=True)
+    
     def __str__(self):
         return self.name
 

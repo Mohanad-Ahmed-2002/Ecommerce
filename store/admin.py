@@ -9,7 +9,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(CustomerOrder)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'email', 'address', 'phone', 'total_price', 'order_date', 'get_product_codes']
+    list_display = ['id', 'name', 'email', 'address', 'phone', 'total_price', 'order_date','government', 'get_product_codes']
     search_fields = ['name', 'phone']
     list_filter = ['order_date']
 
