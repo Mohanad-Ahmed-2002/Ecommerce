@@ -106,19 +106,20 @@
         {% for product in products %}
         <div
             class="bg-white rounded-xl shadow-md border border-black-300 p-4 hover:shadow-2xl transform hover:scale-105 transition duration-300">
+    
             <a href="{% url 'product_detail' product.id %}">
                 <img src="{{ product.images.url }}" alt="{{ product.name }}"
-                    class="rounded-lg w-full h-60 object-contain aspect-square hover:shadow-lg transition duration-300">
+                    class="rounded-lg w-full h-60 object-contain aspect-square bg-white p-2 hover:shadow-lg transition duration-300">
             </a>
-
+    
             <h3 class="text-xl font-bold text-black mt-4">
                 <a href="{% url 'product_detail' product.id %}" class="hover:text-black transition">
                     {{ product.name }}
                 </a>
             </h3>
-
+    
             <p class="text-black font-semibold mt-2">LE {{ product.price }}</p>
-
+    
             <form method="POST" action="{% url 'add_to_cart' product.id %}">
                 {% csrf_token %}
                 <button type="submit"
@@ -129,6 +130,7 @@
         </div>
         {% endfor %}
     </div>
+
 
     <!-- Footer -->
     <footer class="bg-black text-white py-8 px-8 text-center">

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Product, CustomerOrder, Government, OrderItem
+from django.core.exceptions import ObjectDoesNotExist
 
 # Register your models here.
 @admin.register(Product)
@@ -14,10 +15,17 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ['order_date']
 
     def get_product_codes(self, obj):
-        return ", ".join([
-            f"{item.product_code} * ({item.quantity})" for item in obj.order_items.all()
-        ])
+        product_codes = []
+        for item in obj.order_items.all():
+            try:
+                product = item.get_product()  # الحصول على المنتج باستخدام الدالة get_product
+                product_codes.append(f"{product.product_code} * ({item.quantity})")
+            except Product.DoesNotExist:
+                product_codes.append("Product Not Found")  # أو أي رسالة تريد إظهارها في حالة عدم وجود المنتج
+        return ", ".join(product_codes)
+
     get_product_codes.short_description = 'Product Codes'  # اسم العمود في الـ admin
+
 
 @admin.register(Government)
 class GovernmentAdmin(admin.ModelAdmin):
