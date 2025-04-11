@@ -9,6 +9,7 @@ def home(request):
     return render(request,'store/home.html')
 
 def products_home(request):
+    
     products=Product.objects.all()
 
     # فلترة حسب السعر

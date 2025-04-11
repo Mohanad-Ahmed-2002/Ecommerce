@@ -8,39 +8,51 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 </head>
 
 <body
     class="bg-gray-100 min-h-screen flex flex-col bg-[url(/static/images/background2.jpeg)] bg-cover bg-[center_bottom_-10px]">
 
     <!-- Navbar -->
-    <nav
-        class="bg-white shadow-md py-3 px-6 flex justify-between items-center border-b border-gray-300 fixed w-full z-50">
+    <nav class="bg-white shadow-md py-3 px-6 flex justify-between items-center border-b border-gray-300 fixed w-full z-50">
+        <!-- Logo Section -->
         <div class="w-12">
             <a href="{% url 'home' %}">
                 <img src="{% static 'images/MO log.jpeg' %}" alt="Logo"
                     class="object-contain rounded-lg motion-safe:animate-bounce">
             </a>
         </div>
-
-        <!-- Navigation Links for large screens -->
+    
+        <!-- Navigation Links for large screens (hidden on mobile) -->
         <div class="hidden lg:flex gap-12">
-            <a href="{% url 'home' %}" class="relative text-black font-medium hover:text-gray-800">Home</a>
-            <a href="{% url 'products' %}" class="relative text-black font-medium hover:text-gray-800">Shop</a>
+            <a href="{% url 'home' %}"
+                class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
+                    after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
+                    after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+                Home
+            </a>
+    
+            <a href="{% url 'products' %}"
+                class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
+                    after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
+                    after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+                Shop
+            </a>
+    
         </div>
-
-        <!-- Cart and Mobile Menu button -->
+    
+        <!-- Cart and Mobile Menu button (for small screens) -->
         <div class="flex items-center gap-4">
             <!-- Cart Button -->
             <div>
                 <a href="{% url 'cart_detail' %}"
-                    class="bg-black text-white py-2 px-4 rounded-xl flex items-center gap-2 hover:bg-gray-900 motion-safe:animate-bounce">
+                    class="bg-black text-white py-2 px-4 rounded-xl flex items-center gap-2 
+                        hover:bg-gray-900 transition-all duration-300 transform hover:scale-105 shadow-md motion-safe:animate-bounce">
                     <i class="fas fa-shopping-cart"></i>
                 </a>
             </div>
-
-            <!-- Mobile menu button -->
+    
+            <!-- Mobile menu button (hamburger) -->
             <div class="block lg:hidden">
                 <button id="mobile-menu-button" class="text-black focus:outline-none">
                     <i class="fas fa-bars text-2xl"></i>
@@ -105,21 +117,18 @@
     <div class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 flex-grow">
         {% for product in products %}
         <div
-            class="bg-white rounded-xl shadow-md border border-black-300 p-4 hover:shadow-2xl transform hover:scale-105 transition duration-300">
-    
+            class="bg-white rounded-xl shadow-md border border-black-300 p-4 hover:shadow-2xl transform hover:scale-105 transition duration-300 animate__animated animate__fadeIn">
             <a href="{% url 'product_detail' product.id %}">
                 <img src="{{ product.images.url }}" alt="{{ product.name }}"
                     class="rounded-lg w-full h-60 object-contain aspect-square bg-white p-2 hover:shadow-lg transition duration-300">
             </a>
-    
             <h3 class="text-xl font-bold text-black mt-4">
                 <a href="{% url 'product_detail' product.id %}" class="hover:text-black transition">
                     {{ product.name }}
                 </a>
             </h3>
-    
             <p class="text-black font-semibold mt-2">LE {{ product.price }}</p>
-    
+
             <form method="POST" action="{% url 'add_to_cart' product.id %}">
                 {% csrf_token %}
                 <button type="submit"
@@ -130,7 +139,6 @@
         </div>
         {% endfor %}
     </div>
-
 
     <!-- Footer -->
     <footer class="bg-black text-white py-8 px-8 text-center">
