@@ -13,6 +13,7 @@
 <body
     class="bg-gray-100 min-h-screen flex flex-col bg-[url(/static/images/background2.jpeg)] bg-cover bg-[center_bottom_-10px]">
 
+    <!-- Navbar -->
     <nav
         class="bg-white shadow-md py-3 px-6 flex justify-between items-center border-b border-gray-300 fixed w-full z-50">
         <div class="w-12">
@@ -21,19 +22,15 @@
                     class="object-contain rounded-lg motion-safe:animate-bounce">
             </a>
         </div>
-
         <div class="hidden lg:flex gap-12">
-            <a href="{% url 'home' %}" class="relative text-black font-medium hover:text-gray-800">Home</a>
-            <a href="{% url 'products' %}" class="relative text-black font-medium hover:text-gray-800">Shop</a>
+            <a href="{% url 'home' %}" class="text-black font-medium hover:text-gray-800">Home</a>
+            <a href="{% url 'products' %}" class="text-black font-medium hover:text-gray-800">Shop</a>
         </div>
-
         <div class="flex items-center gap-4">
-            <div>
-                <a href="{% url 'cart_detail' %}"
-                    class="bg-black text-white py-2 px-4 rounded-xl flex items-center gap-2 hover:bg-gray-900 motion-safe:animate-bounce">
-                    <i class="fas fa-shopping-cart"></i>
-                </a>
-            </div>
+            <a href="{% url 'cart_detail' %}"
+                class="bg-black text-white py-2 px-4 rounded-xl flex items-center gap-2 hover:bg-gray-900 motion-safe:animate-bounce">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
             <div class="block lg:hidden">
                 <button id="mobile-menu-button" class="text-black focus:outline-none">
                     <i class="fas fa-bars text-2xl"></i>
@@ -101,42 +98,17 @@
                         class="w-full p-2 border border-gray-300 rounded-md">
                         <option value="">Select Governorate</option>
                         {% for gov in governments %}
-                        <option value="{{ gov.id }}" data-shipping-fee="{{ gov.shipping_fee }}">
-                            {{ gov.name }}
-                        </option>
+                        <option value="{{ gov.id }}" data-shipping-fee="{{ gov.shipping_fee }}">{{ gov.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
 
-                <script>
-                    function updateTotals() {
-                        var selectElement = document.getElementById('government');
-                        var selectedOption = selectElement.options[selectElement.selectedIndex];
+                <div class="space-y-3">
+                    <label for="id_code" class="font-semibold">Promo Code:</label>
+                    {{ promo_form.code }}
+                </div>
 
-                        var shippingFee = selectedOption.getAttribute('data-shipping-fee');
-
-                        var subtotal = parseFloat("{{ subtotal }}");
-                        if (isNaN(subtotal)) {
-                            subtotal = 0;
-                        }
-
-                        shippingFee = parseFloat(shippingFee);
-                        if (isNaN(shippingFee)) {
-                            shippingFee = 0;
-                        }
-
-                        var total = subtotal + shippingFee;
-
-                        document.getElementById('subtotal').innerText = 'LE ' + subtotal.toFixed(2);
-                        document.getElementById('shipping').innerText = 'LE ' + shippingFee.toFixed(2);
-                        document.getElementById('total').innerText = 'LE ' + total.toFixed(2);
-                    }
-
-                    window.onload = function () {
-                        updateTotals();
-                    }
-                </script>
-
+                <!-- Totals -->
                 <div class="border-t pt-4 space-y-2">
                     <p class="text-lg font-semibold">Subtotal: <span id="subtotal" class="font-bold">LE {{ subtotal
                             }}</span></p>
@@ -158,40 +130,47 @@
     <!-- Footer -->
     <footer class="bg-black text-white py-6 px-6 text-center mt-auto">
         <div class="flex justify-center gap-6 mb-4">
-            <a href="https://www.instagram.com/m.o_optics?igsh=MTJ6aXpubnppYTExYg%3D%3D&utm_source=qr"
-                class="text-white hover:text-gray-400 transition-transform transform hover:scale-110" target="_blank">
+            <a href="https://www.instagram.com/m.o_optics?igsh=MTJ6aXpubnppYTExYg%3D%3D&utm_source=qr" target="_blank"
+                class="hover:text-gray-400 hover:scale-110 transition-transform">
                 <i class="fa-brands fa-instagram text-3xl"></i>
             </a>
-            <a href="https://wa.me/201062654749?text=مرحبا، أريد الاستفسار عن خدماتكم."
-                class="text-white hover:text-gray-400 transition-transform transform hover:scale-110" target="_blank">
+            <a href="https://wa.me/201062654749?text=مرحبا، أريد الاستفسار عن خدماتكم." target="_blank"
+                class="hover:text-gray-400 hover:scale-110 transition-transform">
                 <i class="fa-brands fa-whatsapp text-3xl"></i>
             </a>
         </div>
         <p class="font-bold text-lg">&copy; 2025 MO Store - All Rights Reserved</p>
         <p class="text-sm text-gray-500 mt-4">
-            <a href="{% url 'privacy_policy' %}" class="text-white hover:text-gray-400 transition duration-300">
-                Privacy Policy
-            </a>
+            <a href="{% url 'privacy_policy' %}" class="text-white hover:text-gray-400">Privacy Policy</a>
         </p>
         <p class="text-sm text-gray-500 mt-2">
             <a href="https://my-portfolio-59ne.onrender.com/" target="_blank"
-                class="text-white font-semibold hover:text-gray-400 transition duration-300">Designed by: Mohanad Ahmed
-                Khalil</a>
+                class="text-white font-semibold hover:text-gray-400">Designed by: Mohanad Ahmed Khalil</a>
         </p>
     </footer>
 
-    <!-- Mobile Menu Script -->
+    <!-- Scripts -->
     <script>
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const closeMenuButton = document.getElementById('close-menu-button');
+        function updateTotals() {
+            const select = document.getElementById('government');
+            const selected = select.options[select.selectedIndex];
+            const shipping = parseFloat(selected.getAttribute('data-shipping-fee')) || 0;
+            const subtotal = parseFloat("{{ subtotal|floatformat:2 }}") || 0;
+            const total = subtotal + shipping;
 
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+            document.getElementById('subtotal').innerText = 'LE ' + subtotal.toFixed(2);
+            document.getElementById('shipping').innerText = 'LE ' + shipping.toFixed(2);
+            document.getElementById('total').innerText = 'LE ' + total.toFixed(2);
+        }
+
+        window.onload = updateTotals;
+
+        document.getElementById('mobile-menu-button').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
         });
 
-        closeMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
+        document.getElementById('close-menu-button').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.add('hidden');
         });
     </script>
 </body>
