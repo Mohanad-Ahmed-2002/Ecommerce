@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django import forms
 from cloudinary_storage.storage import MediaCloudinaryStorage
+from datetime import date,timezone
+from django.utils import timezone
 
 
 # Create your models here.
@@ -88,4 +90,18 @@ class OrderItem(models.Model):
     
     def __str__(self):
         return f"{self.get_product().name} - {self.quantity}"
+
+class PromoCode(models.Model):
+    code = models.CharField(max_length=50, unique=True)
+    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)
+    is_active = models.BooleanField(default=True)
+    expiration_date = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_valid(self):
+        return self.is_active and self.expiration_date > timezone.now()
+
+
+    def __str__(self):
+        return self.code
 

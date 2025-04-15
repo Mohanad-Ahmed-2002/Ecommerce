@@ -12,4 +12,6 @@ urlpatterns = [
     path('checkout/',views.checkout,name='checkout'),
     path('order_success/<int:order_id>/', views.order_success, name='order_success'),
     path('privacy_policy/', views.privacy_policy, name='privacy_policy'),
+    path('validate-promo/', views.validate_promo_code, name='validate_promo_code'),
+
 ]

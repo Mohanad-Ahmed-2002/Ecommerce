@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 </head>
 
 <body
@@ -24,23 +23,16 @@
             </a>
         </div>
 
-        <!-- Navigation Links for large screens -->
         <div class="hidden lg:flex gap-12">
-            <a href="{% url 'home' %}" class="relative text-black font-medium hover:text-gray-800">Home</a>
-            <a href="{% url 'products' %}" class="relative text-black font-medium hover:text-gray-800">Shop</a>
+            <a href="{% url 'home' %}" class="nav-link">Home</a>
+            <a href="{% url 'products' %}" class="nav-link">Shop</a>
         </div>
 
-        <!-- Cart and Mobile Menu button -->
         <div class="flex items-center gap-4">
-            <!-- Cart Button -->
-            <div>
-                <a href="{% url 'cart_detail' %}"
-                    class="bg-black text-white py-2 px-4 rounded-xl flex items-center gap-2 hover:bg-gray-900 motion-safe:animate-bounce">
-                    <i class="fas fa-shopping-cart"></i>
-                </a>
-            </div>
-
-            <!-- Mobile menu button -->
+            <a href="{% url 'cart_detail' %}"
+                class="bg-black text-white py-2 px-4 rounded-xl flex items-center gap-2 hover:bg-gray-900 motion-safe:animate-bounce">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
             <div class="block lg:hidden">
                 <button id="mobile-menu-button" class="text-black focus:outline-none">
                     <i class="fas fa-bars text-2xl"></i>
@@ -63,7 +55,7 @@
     </div>
 
     <!-- Filter Section -->
-    <div class="bg-white shadow-md p-6 rounded-lg max-w-4xl mx-auto mt-20">
+    <div class="bg-white/80 backdrop-blur-md shadow-md p-6 rounded-lg max-w-4xl mx-auto mt-[100px] sm:mt-32">
         <form method="GET" action="{% url 'products' %}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <div>
                 <label class="block text-black font-bold mb-2">
@@ -102,38 +94,41 @@
     </div>
 
     <!-- Products Section -->
+    {% if products %}
     <div class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 flex-grow">
         {% for product in products %}
         <div
-            class="bg-white rounded-xl shadow-md border border-black-300 p-4 hover:shadow-2xl transform hover:scale-105 transition duration-300">
-    
+            class="bg-white/90 backdrop-blur-md rounded-xl shadow-md border border-black-300 p-4 hover:shadow-2xl transform hover:scale-105 transition duration-300">
+
             <a href="{% url 'product_detail' product.id %}">
-                <img src="{{ product.images.url }}" alt="{{ product.name }}"
+                <img src="{{ product.images.url }}" alt="{{ product.name }}" title="{{ product.name }}"
                     class="rounded-lg w-full h-60 object-contain aspect-square bg-white p-2 hover:shadow-lg transition duration-300">
             </a>
-    
+
             <h3 class="text-xl font-bold text-black mt-4">
                 <a href="{% url 'product_detail' product.id %}" class="hover:text-black transition">
                     {{ product.name }}
                 </a>
             </h3>
-    
+
             <p class="text-black font-semibold mt-2">LE {{ product.price }}</p>
-    
+
             <form method="POST" action="{% url 'add_to_cart' product.id %}">
                 {% csrf_token %}
                 <button type="submit"
-                    class="add-to-cart-btn font-bold bg-black text-white w-full py-2 mt-4 rounded-lg flex items-center justify-center gap-2 animate-pulse transition relative overflow-hidden transition-all duration-300">
-                    <i class="fas fa-shopping-cart animate-bounce"></i> Add to Cart
+                    class="font-bold bg-black text-white w-full py-2 mt-4 rounded-lg flex items-center justify-center gap-2 hover:scale-105 transition-all duration-300">
+                    <i class="fas fa-shopping-cart"></i> Add to Cart
                 </button>
             </form>
         </div>
         {% endfor %}
     </div>
-
+    {% else %}
+    <p class="text-center text-xl text-black mt-16">No products found. Try adjusting your filters.</p>
+    {% endif %}
 
     <!-- Footer -->
-    <footer class="bg-black text-white py-8 px-8 text-center">
+    <footer class="bg-black text-white py-8 px-8 text-center mt-12">
         <div class="flex justify-center gap-6 mb-4">
             <a href="https://www.instagram.com/m.o_optics?igsh=MTJ6aXpubnppYTExYg%3D%3D&utm_source=qr"
                 class="text-white hover:text-gray-400 transition-transform transform hover:scale-110" target="_blank">
@@ -171,6 +166,33 @@
             mobileMenu.classList.add('hidden');
         });
     </script>
+
+    <!-- Custom Nav Link Hover -->
+    <style>
+        .nav-link {
+            position: relative;
+            font-weight: 500;
+            color: black;
+            transition: all 0.3s;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: black;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+        }
+
+        .nav-link:hover::after {
+            transform: scaleX(1);
+        }
+    </style>
 
 </body>
 

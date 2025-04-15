@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, CustomerOrder, Government, OrderItem
+from .models import Product, CustomerOrder, Government, OrderItem,PromoCode
 from django.core.exceptions import ObjectDoesNotExist
 
 # Register your models here.
@@ -30,3 +30,9 @@ class OrderAdmin(admin.ModelAdmin):
 @admin.register(Government)
 class GovernmentAdmin(admin.ModelAdmin):
     list_display = ('name', 'shipping_fee')
+
+
+@admin.register(PromoCode)
+class PromoCodeAdmin(admin.ModelAdmin):
+    list_display = ['code', 'discount_percentage', 'is_active', 'expiration_date']
+    search_fields = ['code']

@@ -24,8 +24,19 @@
     
         <!-- Navigation Links for large screens -->
         <div class="hidden lg:flex gap-12">
-            <a href="{% url 'home' %}" class="relative text-black font-medium hover:text-gray-800">Home</a>
-            <a href="{% url 'products' %}" class="relative text-black font-medium hover:text-gray-800">Shop</a>
+            <a href="{% url 'home' %}"
+                class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
+                            after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
+                            after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+                Home
+            </a>
+            
+            <a href="{% url 'products' %}"
+                class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
+                            after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
+                            after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+                Shop
+            </a>
         </div>
     
         <!-- Cart and Mobile Menu button -->
@@ -52,18 +63,17 @@
         </div>
     </div>
     <!-- Page Content -->
-    <div class="container mx-auto py-28 text-center flex-grow">
-        <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6">
-            <h1 class="text-2xl font-bold text-black mb-4">🎉 Your Order Has Been Placed Successfully! 🎉</h1>
-
-            <p class="text-black mb-2">📌 <strong>Order ID:</strong> #{{ order.id }}</p>
-
-            <p class="text-black mb-2">💰 <strong>Total Price:</strong> LE {{ order.total_price }}</p>
-
+    <div class="container mx-auto py-28 px-4 sm:px-6 lg:px-8 text-center flex-grow">
+        <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6 sm:p-8">
+            <h1 class="text-2xl sm:text-3xl font-bold text-black mb-4">🎉 Your Order Has Been Placed Successfully! 🎉</h1>
+    
+            <p class="text-black mb-2 text-base sm:text-lg">📌 <strong>Order ID:</strong> #{{ order.id }}</p>
+            <p class="text-black mb-2 text-base sm:text-lg">💰 <strong>Total Price:</strong> LE {{ order.total_price }}</p>
+    
             <p class="text-lg text-gray-600 mt-4">Thank you for shopping with us! 😊</p>
-
+    
             <a href="{% url 'products' %}"
-                class="mt-6 inline-block bg-black animate-pulse text-white px-4 py-2 rounded-lg shadow-md  transition duration-300">
+                class="mt-6 inline-block bg-black animate-pulse text-white px-6 py-3 rounded-lg shadow-md hover:bg-gray-900 transition duration-300">
                 🛍️ Continue Shopping
             </a>
         </div>

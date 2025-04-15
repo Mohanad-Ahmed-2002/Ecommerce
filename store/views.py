@@ -1,7 +1,8 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import Product,CartItem,CustomerOrder,OrderForm,Government,OrderItem
+from .models import Product,CartItem,CustomerOrder,OrderForm,Government,OrderItem,PromoCode
 from django.contrib import messages
 from decimal import Decimal
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -124,7 +125,22 @@ def checkout(request):
         except Government.DoesNotExist:
             shipping_fee = Decimal(70)
 
-    grand_total = subtotal + shipping_fee
+    promo_code_str = request.POST.get('promo_code', '').strip()
+    discount_amount = Decimal(0)
+
+    if promo_code_str:
+        try:
+            promo = PromoCode.objects.get(code__iexact=promo_code_str)
+            if promo.is_valid():
+                discount_amount = (subtotal * promo.discount_percentage) / 100
+                messages.success(request, f"Promo code applied! You saved LE {discount_amount:.2f}")
+            else:
+                messages.error(request, "Promo code is not valid or expired.")
+        except PromoCode.DoesNotExist:
+            messages.error(request, "Promo code not found.")
+
+    grand_total = subtotal - discount_amount + shipping_fee
+
 
     if request.method == 'POST':
         if form.is_valid():
@@ -159,7 +175,8 @@ def checkout(request):
         'subtotal': subtotal,
         'shipping_fee': shipping_fee,
         'grand_total': grand_total,
-        'governments': governments
+        'governments': governments,
+        'discount_amount': discount_amount if discount_amount > 0 else None
     })
 
 def order_success(request,order_id):
@@ -196,3 +213,19 @@ def calculate_total_price(request):
 def privacy_policy(request):    
 
     return render(request, 'store/privacy_policy.html')
+
+
+def validate_promo_code(request):
+    code = request.GET.get('code', '')
+    subtotal = Decimal(request.GET.get('subtotal', '0'))
+    discount = 0
+
+    try:
+        promo = PromoCode.objects.get(code__iexact=code)
+        if promo.is_valid():
+            discount = (subtotal * promo.discount_percentage) / 100
+            return JsonResponse({'valid': True, 'discount': float(discount)})
+        else:
+            return JsonResponse({'valid': False, 'message': 'Promo code expired or inactive'})
+    except PromoCode.DoesNotExist:
+        return JsonResponse({'valid': False, 'message': 'Promo code not found'})

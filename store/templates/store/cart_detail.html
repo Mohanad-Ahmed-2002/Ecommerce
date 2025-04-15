@@ -24,8 +24,19 @@
 
         <!-- Navigation Links for large screens -->
         <div class="hidden lg:flex gap-12">
-            <a href="{% url 'home' %}" class="relative text-black font-medium hover:text-gray-800">Home</a>
-            <a href="{% url 'products' %}" class="relative text-black font-medium hover:text-gray-800">Shop</a>
+            <a href="{% url 'home' %}"
+                class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
+                            after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
+                            after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+                Home
+            </a>
+            
+            <a href="{% url 'products' %}"
+                class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
+                            after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
+                            after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+                Shop
+            </a>
         </div>
 
         <!-- Cart and Mobile Menu button -->
