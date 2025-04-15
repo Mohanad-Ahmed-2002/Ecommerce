@@ -58,6 +58,8 @@ INSTALLED_APPS = [
     'cloudinary_storage',  
     'cloudinary',
     'django.contrib.staticfiles',
+    'widget_tweaks',
+
 ]
 
 MIDDLEWARE = [

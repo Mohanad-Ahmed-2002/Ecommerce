@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+{% load widget_tweaks %}
 
 <head>
     <title>Checkout</title>
@@ -10,27 +11,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body
-    class="bg-gray-100 min-h-screen flex flex-col bg-[url(/static/images/background2.jpeg)] bg-cover bg-[center_bottom_-10px]">
+<body class="bg-gray-100 bg-cover bg-center min-h-screen bg-[url('/static/images/background2.jpeg')]">
 
-    <!-- Navbar -->
-    <nav
-        class="bg-white shadow-md py-3 px-6 flex justify-between items-center border-b border-gray-300 fixed w-full z-50">
+    <nav class="bg-white shadow-md py-3 px-6 flex justify-between items-center border-b border-gray-300 fixed top-0 w-full z-50 ">
         <div class="w-12">
             <a href="{% url 'home' %}">
                 <img src="{% static 'images/MO log.jpeg' %}" alt="Logo"
                     class="object-contain rounded-lg motion-safe:animate-bounce">
             </a>
         </div>
+    
+        <!-- Navigation Links for large screens -->
         <div class="hidden lg:flex gap-12">
-            <a href="{% url 'home' %}" class="text-black font-medium hover:text-gray-800">Home</a>
-            <a href="{% url 'products' %}" class="text-black font-medium hover:text-gray-800">Shop</a>
-        </div>
-        <div class="flex items-center gap-4">
-            <a href="{% url 'cart_detail' %}"
-                class="bg-black text-white py-2 px-4 rounded-xl flex items-center gap-2 hover:bg-gray-900 motion-safe:animate-bounce">
-                <i class="fas fa-shopping-cart"></i>
+            <a href="{% url 'home' %}"
+                class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
+                            after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
+                            after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+                Home
             </a>
+            
+            <a href="{% url 'products' %}"
+                class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
+                            after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
+                            after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
+                Shop
+            </a>
+        </div>
+    
+        <!--  Mobile Menu button -->
+        <div class="flex items-center gap-4">
+            <!-- Mobile menu button -->
             <div class="block lg:hidden">
                 <button id="mobile-menu-button" class="text-black focus:outline-none">
                     <i class="fas fa-bars text-2xl"></i>
@@ -38,7 +48,7 @@
             </div>
         </div>
     </nav>
-
+    
     <!-- Mobile Menu -->
     <div id="mobile-menu" class="lg:hidden fixed top-0 left-0 w-full h-full bg-white z-40 hidden">
         <div class="flex justify-end p-4">
@@ -53,18 +63,18 @@
     </div>
 
     <!-- Checkout Section -->
-    <div class="max-w-4xl mx-auto p-6 lg:p-12 justify-center mt-24">
-        <h1 class="text-4xl font-bold p-6 text-black mb-8 text-center">Checkout</h1>
+    <section class="mt-24 px-4 md:px-8 lg:px-0 max-w-4xl mx-auto w-full">
+        <h1 class="text-3xl md:text-4xl font-bold text-center mb-8 text-black">Checkout</h1>
 
-        <div class="bg-white shadow-lg rounded-lg p-8 space-y-6">
-            <h2 class="text-2xl font-semibold text-black">Order Details</h2>
+        <div class="bg-white shadow-xl rounded-2xl p-6 md:p-10 space-y-6">
+            <h2 class="text-xl font-semibold text-black mb-4">Order Details</h2>
 
-            <!-- Product Details -->
-            <div class="space-y-6">
+            <!-- Products -->
+            <div class="space-y-4">
                 {% for item in cart_items %}
-                <div class="flex justify-between items-center border-b pb-3 p-4 shadow-md bg-gray-100 rounded-lg">
+                <div class="flex justify-between items-center bg-gray-100 p-4 rounded-lg shadow-sm">
                     <div>
-                        <p class="font-semibold">{{ item.product.name }}</p>
+                        <p class="font-medium">{{ item.product.name }}</p>
                         <p class="text-sm text-gray-500">Quantity: {{ item.quantity }}</p>
                     </div>
                     <p class="font-bold text-lg">LE {{ item.total_price }}</p>
@@ -73,29 +83,32 @@
             </div>
 
             <!-- Form -->
-            <form method="POST" class="space-y-4">
+            <form method="POST" class="grid gap-4 md:grid-cols-2">
                 {% csrf_token %}
-                <div class="space-y-3">
+                <div class="col-span-full space-y-2">
                     <label for="id_name" class="font-semibold">Name:</label>
-                    {{ form.name }}
-                </div>
-                <div class="space-y-3">
-                    <label for="id_email" class="font-semibold">Email:</label>
-                    {{ form.email }}
-                </div>
-                <div class="space-y-3">
-                    <label for="id_address" class="font-semibold">Address:</label>
-                    {{ form.address }}
-                </div>
-                <div class="space-y-3">
-                    <label for="id_phone" class="font-semibold">Phone:</label>
-                    {{ form.phone }}
+                    {{ form.name|add_class:"w-full border border-gray-300 p-2 rounded" }}
                 </div>
 
-                <div class="space-y-3">
+                <div class="space-y-2">
+                    <label for="id_email" class="font-semibold">Email:</label>
+                    {{ form.email|add_class:"w-full border border-gray-300 p-2 rounded" }}
+                </div>
+
+                <div class="space-y-2">
+                    <label for="id_phone" class="font-semibold">Phone:</label>
+                    {{ form.phone|add_class:"w-full border border-gray-300 p-2 rounded" }}
+                </div>
+
+                <div class="col-span-full space-y-2">
+                    <label for="id_address" class="font-semibold">Address:</label>
+                    {{ form.address|add_class:"w-full border border-gray-300 p-2 rounded" }}
+                </div>
+
+                <div class="col-span-full space-y-2">
                     <label for="id_governorate" class="font-semibold">Governorate:</label>
                     <select name="government" id="government" onchange="updateTotals()"
-                        class="w-full p-2 border border-gray-300 rounded-md">
+                        class="w-full border border-gray-300 p-2 rounded">
                         <option value="">Select Governorate</option>
                         {% for gov in governments %}
                         <option value="{{ gov.id }}" data-shipping-fee="{{ gov.shipping_fee }}">{{ gov.name }}</option>
@@ -103,76 +116,107 @@
                     </select>
                 </div>
 
-                <div class="space-y-3">
-                    <label for="id_code" class="font-semibold">Promo Code:</label>
-                    {{ promo_form.code }}
+                <div class="col-span-full space-y-2">
+                    <label for="promo_code" class="font-semibold">Promo Code:</label>
+                    <input type="text" name="promo_code" id="promo_code"
+                        class="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring focus:ring-black">
                 </div>
 
-                <!-- Totals -->
-                <div class="border-t pt-4 space-y-2">
-                    <p class="text-lg font-semibold">Subtotal: <span id="subtotal" class="font-bold">LE {{ subtotal
-                            }}</span></p>
-                    <p class="text-lg font-semibold">Shipping: <span id="shipping" class="font-bold">LE {{ shipping_fee
-                            }}</span></p>
+                <div class="col-span-full border-t pt-4 space-y-2">
+                    <p class="text-lg font-semibold">Subtotal: <span id="subtotal">LE {{ subtotal }}</span></p>
+                    <p class="text-lg font-semibold">Shipping: <span id="shipping">LE {{ shipping_fee }}</span></p>
+                    <p id="discount" class="text-lg font-semibold text-green-700 hidden"></p>
                     <h3 class="text-xl font-bold">Total Price: <span id="total">LE {{ grand_total }}</span></h3>
                 </div>
 
-                <div class="flex justify-end">
+                <div class="col-span-full flex justify-end">
                     <button type="submit"
-                        class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 font-bold transition duration-300 ease-in-out transform hover:scale-105 animate-pulse">
+                        class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 font-bold transition duration-300 transform hover:scale-105">
                         Confirm Order
                     </button>
                 </div>
             </form>
         </div>
-    </div>
+    </section>
 
     <!-- Footer -->
-    <footer class="bg-black text-white py-6 px-6 text-center mt-auto">
+    <footer class="bg-black text-white text-center py-6 mt-16">
         <div class="flex justify-center gap-6 mb-4">
-            <a href="https://www.instagram.com/m.o_optics?igsh=MTJ6aXpubnppYTExYg%3D%3D&utm_source=qr" target="_blank"
-                class="hover:text-gray-400 hover:scale-110 transition-transform">
+            <a href="https://www.instagram.com/m.o_optics?igsh=MTJ6aXpubnppYTExYg%3D%3D&utm_source=qr"
+                class="hover:text-gray-400 transition-transform transform hover:scale-110" target="_blank">
                 <i class="fa-brands fa-instagram text-3xl"></i>
             </a>
-            <a href="https://wa.me/201062654749?text=مرحبا، أريد الاستفسار عن خدماتكم." target="_blank"
-                class="hover:text-gray-400 hover:scale-110 transition-transform">
+            <a href="https://wa.me/201062654749?text=مرحبا، أريد الاستفسار عن خدماتكم."
+                class="hover:text-gray-400 transition-transform transform hover:scale-110" target="_blank">
                 <i class="fa-brands fa-whatsapp text-3xl"></i>
             </a>
         </div>
         <p class="font-bold text-lg">&copy; 2025 MO Store - All Rights Reserved</p>
-        <p class="text-sm text-gray-500 mt-4">
-            <a href="{% url 'privacy_policy' %}" class="text-white hover:text-gray-400">Privacy Policy</a>
+        <p class="text-sm text-gray-400 mt-2">
+            <a href="{% url 'privacy_policy' %}" class="hover:text-gray-300">Privacy Policy</a>
         </p>
-        <p class="text-sm text-gray-500 mt-2">
+        <p class="text-sm text-gray-400 mt-2">
             <a href="https://my-portfolio-59ne.onrender.com/" target="_blank"
-                class="text-white font-semibold hover:text-gray-400">Designed by: Mohanad Ahmed Khalil</a>
+                class="font-semibold hover:text-gray-300">Designed by: Mohanad Ahmed Khalil</a>
         </p>
     </footer>
 
     <!-- Scripts -->
     <script>
         function updateTotals() {
-            const select = document.getElementById('government');
-            const selected = select.options[select.selectedIndex];
-            const shipping = parseFloat(selected.getAttribute('data-shipping-fee')) || 0;
-            const subtotal = parseFloat("{{ subtotal|floatformat:2 }}") || 0;
-            const total = subtotal + shipping;
+            const govSelect = document.getElementById('government');
+            const selected = govSelect.options[govSelect.selectedIndex];
+            let shippingFee = parseFloat(selected.getAttribute('data-shipping-fee')) || 0;
+            let subtotal = parseFloat("{{ subtotal }}") || 0;
+            let discount = parseFloat(document.getElementById('discount')?.dataset.amount || 0);
+            let total = subtotal - discount + shippingFee;
 
-            document.getElementById('subtotal').innerText = 'LE ' + subtotal.toFixed(2);
-            document.getElementById('shipping').innerText = 'LE ' + shipping.toFixed(2);
+            document.getElementById('shipping').innerText = 'LE ' + shippingFee.toFixed(2);
             document.getElementById('total').innerText = 'LE ' + total.toFixed(2);
         }
 
-        window.onload = updateTotals;
+        document.getElementById('promo_code').addEventListener('input', function () {
+            const promoCode = this.value;
+            const subtotal = parseFloat("{{ subtotal }}");
+
+            if (promoCode.length > 1) {
+                fetch(`/validate-promo/?code=${promoCode}&subtotal=${subtotal}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        document.getElementById('promo-msg')?.remove();
+                        const discountElem = document.getElementById('discount');
+
+                        if (data.valid) {
+                            discountElem.innerHTML = `Discount: <span class="font-bold">- LE ${data.discount.toFixed(2)}</span>`;
+                            discountElem.dataset.amount = data.discount;
+                            discountElem.classList.remove('hidden');
+                            updateTotals();
+                        } else {
+                            discountElem.classList.add('hidden');
+                            const msg = document.createElement('p');
+                            msg.id = 'promo-msg';
+                            msg.className = 'text-sm text-red-600 font-semibold mt-1';
+                            msg.innerText = data.message || 'Invalid promo code';
+                            document.getElementById('promo_code').after(msg);
+                        }
+                    });
+            } else {
+                document.getElementById('discount').classList.add('hidden');
+                document.getElementById('promo-msg')?.remove();
+                updateTotals();
+            }
+        });
 
         document.getElementById('mobile-menu-button').addEventListener('click', () => {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
-
         document.getElementById('close-menu-button').addEventListener('click', () => {
             document.getElementById('mobile-menu').classList.add('hidden');
         });
+
+        window.onload = updateTotals;
     </script>
+
 </body>
 
 </html>

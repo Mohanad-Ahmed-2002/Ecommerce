@@ -8,14 +8,12 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
 </head>
 
-<body>
+<body class=""> <!-- Padding top to make space for fixed navbar -->
 
     <nav
         class="bg-white shadow-md py-3 px-6 flex justify-between items-center border-b border-gray-300 fixed w-full z-50">
-        <!-- Logo Section -->
         <div class="w-12">
             <a href="{% url 'home' %}">
                 <img src="{% static 'images/MO log.jpeg' %}" alt="Logo"
@@ -23,42 +21,25 @@
             </a>
         </div>
 
-        <!-- Navigation Links for large screens (hidden on mobile) -->
         <div class="hidden lg:flex gap-12">
+            <!-- Navigation Links -->
+            {% comment %} Add animation classes if needed {% endcomment %}
             <a href="{% url 'home' %}"
-                class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
-                after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
-                after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
-                Home
-            </a>
-
+                class="relative text-black font-medium hover:text-gray-800 transition-all duration-300 after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">Home</a>
             <a href="{% url 'products' %}"
-                class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
-                after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
-                after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
-                Shop
-            </a>
-
+                class="relative text-black font-medium hover:text-gray-800 transition-all duration-300 after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">Shop</a>
             <a href="#about"
-                class="relative text-black font-medium hover:text-gray-800 transition-all duration-300
-                after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 
-                after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">
-                About Us
-            </a>
+                class="relative text-black font-medium hover:text-gray-800 transition-all duration-300 after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-black after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100">About
+                Us</a>
         </div>
 
-        <!-- Cart and Mobile Menu button (for small screens) -->
         <div class="flex items-center gap-4">
-            <!-- Cart Button -->
             <div>
                 <a href="{% url 'cart_detail' %}"
-                    class="bg-black text-white py-2 px-4 rounded-xl flex items-center gap-2 
-                    hover:bg-gray-900 transition-all duration-300 transform hover:scale-105 shadow-md motion-safe:animate-bounce">
+                    class="bg-black text-white py-2 px-4 rounded-xl flex items-center gap-2 hover:bg-gray-900 transition-all duration-300 transform hover:scale-105 shadow-md motion-safe:animate-bounce">
                     <i class="fas fa-shopping-cart"></i>
                 </a>
             </div>
-
-            <!-- Mobile menu button (hamburger) -->
             <div class="block lg:hidden">
                 <button id="mobile-menu-button" class="text-black focus:outline-none">
                     <i class="fas fa-bars text-2xl"></i>
@@ -67,7 +48,6 @@
         </div>
     </nav>
 
-    <!-- Mobile Menu -->
     <div id="mobile-menu" class="lg:hidden fixed top-0 left-0 w-full h-full bg-white z-40 hidden">
         <div class="flex justify-end p-4">
             <button id="close-menu-button" class="text-black">
@@ -79,49 +59,40 @@
             <a href="{% url 'products' %}" class="text-xl text-black hover:text-gray-800">Shop</a>
             <a href="#about" class="text-xl text-black hover:text-gray-800">About Us</a>
         </div>
-    </div> 
+    </div>
 
-    <!-- Hero Section -->
     <section
-        class="flex flex-col items-center justify-center h-screen bg-[url('/static/images/moS.jpeg')] bg-cover bg-center bg-no-repeat  loading=lazy ">
+        class="flex flex-col items-center justify-center min-h-screen bg-[url('/static/images/moS.jpeg')] bg-cover bg-center bg-no-repeat">
         <a href="{% url 'products' %}"
-            class="relative inline-block text-center text-xl px-12 py-6 text-black font-bold rounded-full bg-gray-300 hover:bg-black hover:text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border-2 border-transparent focus:outline-none focus:ring-4 hover:ring-4 ring-black ring-opacity-50 motion-safe:animate-pulse mt-80 hover:-translate-y-1">
+            class="relative inline-block text-center text-xl px-10 py-4 text-black font-bold rounded-full bg-silver hover:bg-black-600 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border-2 border-transparent focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 motion-safe:animate-pulse mt-80">
             Start Shopping
         </a>
-
-
-
-
     </section>
 
-    <!-- About Us Section -->
     <section class="py-24 px-8" id="about">
         <div class="container mx-auto max-w-6xl">
             <h2 class="text-5xl font-bold text-center text-black mb-12 animate-fade-in">About Us</h2>
             <div class="flex flex-col md:flex-row items-center gap-16">
                 <div class="w-full md:w-1/2 space-y-6">
                     <h3 class="text-3xl font-bold text-gray-900">Discover Clear Vision with MO-OPTICS</h3>
-                    <p class="text-lg text-gray-700 leading-relaxed">
-                        At <span class="font-bold text-black">MO-OPTICS</span>, we're dedicated to transforming your vision
-                        with precision-crafted eyewear designed for both comfort and style.
-                    </p>
-                    <p class="text-lg text-gray-700 leading-relaxed">
-                        With years of expertise in the optical industry, our experienced team is committed to helping you
-                        find the perfect pair of glasses that enhance your vision and complement your personal style.
-                    </p>
-                    <p class="text-lg text-black font-bold">
-                        Visit MO-OPTICS today and experience eyewear excellence firsthand!
-                    </p>
+                    <p class="text-lg text-gray-700 leading-relaxed">At <span
+                            class="font-bold text-black">MO-OPTICS</span>, we're dedicated to transforming your vision
+                        with precision-crafted eyewear designed for both comfort and style.</p>
+                    <p class="text-lg text-gray-700 leading-relaxed">With years of expertise in the optical industry,
+                        our experienced team is committed to helping you find the perfect pair of glasses that enhance
+                        your vision and complement your personal style.</p>
+                    <p class="text-lg text-black font-bold">Visit MO-OPTICS today and experience eyewear excellence
+                        firsthand!</p>
                 </div>
                 <div class="w-full md:w-1/2">
                     <img src="/static/images/aboutus.jpeg" alt="Our Team"
-                        class="rounded-2xl shadow-xl w-full h-96 object-cover transform transition duration-300 hover:scale-105"
+                        class="rounded-2xl shadow-xl w-full max-h-[400px] sm:h-96 object-cover transform transition duration-300 hover:scale-105"
                         loading="lazy">
                 </div>
             </div>
-    
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-12 mt-16 ">
-                <div class="text-center space-y-4 ">
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-12 mt-16">
+                <div class="text-center space-y-4">
                     <i class="fa-solid fa-glasses text-6xl text-black"></i>
                     <h4 class="text-2xl font-bold text-gray-900">Quality Glasses</h4>
                     <p class="text-gray-600">Crafted with precision and designed for comfort.</p>
@@ -140,8 +111,7 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-black text-white py-8 px-8 text-center">
+    <footer class="bg-black text-white py-10 px-6 text-center space-y-4">
         <div>
             <div class="flex justify-center gap-6 mb-4">
                 <a href="https://www.instagram.com/m.o_optics" target="_blank"
@@ -153,12 +123,11 @@
                     <i class="fa-brands fa-whatsapp text-3xl"></i>
                 </a>
             </div>
-    
             <p class="font-bold text-lg">&copy; 2025 MO Store - All Rights Reserved</p>
-            <p class="text-sm text-gray-500 mt-4">
+            <p class="text-sm text-gray-500">
                 <a href="{% url 'privacy_policy' %}" class="text-white hover:text-gray-400">Privacy Policy</a>
             </p>
-            <p class="text-sm text-gray-500 mt-2">
+            <p class="text-sm text-gray-500">
                 <a href="https://my-portfolio-59ne.onrender.com/" target="_blank"
                     class="text-white font-semibold hover:text-gray-400">
                     Designed by: Mohanad Ahmed Khalil
@@ -166,20 +135,16 @@
             </p>
         </div>
     </footer>
-    
-    <!-- Mobile Menu Script -->
+
     <script>
-        // Toggle mobile menu
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
         const closeMenuButton = document.getElementById('close-menu-button');
 
-        // إضافة حدث عند الضغط على زر المينيو
         mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden'); // Toggle بين إظهار وإخفاء القائمة
+            mobileMenu.classList.toggle('hidden');
         });
 
-        // إغلاق القائمة عند الضغط على زر الإغلاق
         closeMenuButton.addEventListener('click', () => {
             mobileMenu.classList.add('hidden');
         });

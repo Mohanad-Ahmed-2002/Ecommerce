@@ -1,9 +1,8 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import Product,CartItem,CustomerOrder,OrderForm,Government,OrderItem,PromoCode,PromoCodeForm
+from .models import Product,CartItem,CustomerOrder,OrderForm,Government,OrderItem,PromoCode
 from django.contrib import messages
 from decimal import Decimal
-from .cart_services import CartService,PricingService
-from django.utils import timezone
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -11,7 +10,6 @@ def home(request):
     return render(request,'store/home.html')
 
 def products_home(request):
-    
     products=Product.objects.all()
 
     # فلترة حسب السعر
@@ -108,79 +106,77 @@ def decrease_quantity(request, item_id):
     return redirect('cart_detail')
 
 def checkout(request):
-    order_form = OrderForm(request.POST or None)
-    promo_form = PromoCodeForm(request.POST or None)
-
-    # تأكيد وجود session
+    form = OrderForm(request.POST or None)
+    
     session_key = request.session.session_key
     if not session_key:
         request.session.create()
         session_key = request.session.session_key
 
-    # الحصول على المحافظة المختارة
+    price_data = calculate_total_price(request)
+    subtotal = Decimal(price_data['subtotal'])
+    shipping_fee = Decimal(0)
     government_id = request.POST.get('government')
-    pricing_service = PricingService(session_key, government_id)
 
-    # حساب الفاتورة
-    try:
-        subtotal, shipping_fee, grand_total = pricing_service.calculate_prices()
-    except ValueError as e:
-        messages.error(request, str(e))
-        return redirect('checkout')
-
-    # التحقق من كود الخصم
-    discount_amount = Decimal('0.00')
-    promo_code = None
-
-    if request.method == 'POST' and promo_form.is_valid():
-        code_input = promo_form.cleaned_data['code']
+    if request.method == 'POST' and government_id:
         try:
-            promo = PromoCode.objects.get(code__iexact=code_input)
-            if promo.is_valid() and grand_total >= promo.min_order_value:
-                promo_code = promo
-                if promo.discount_type == 'percentage':
-                    percentage = Decimal(str(promo.discount_value)) / Decimal('100')
-                    discount_amount = (grand_total * percentage).quantize(Decimal('0.01'))
-                else:
-                    discount_amount = Decimal(str(promo.discount_value))
-                grand_total = (grand_total - discount_amount).quantize(Decimal('0.01'))
+            selected_government = Government.objects.get(id=government_id)
+            shipping_fee = Decimal(selected_government.shipping_fee)
+        except Government.DoesNotExist:
+            shipping_fee = Decimal(70)
+
+    promo_code_str = request.POST.get('promo_code', '').strip()
+    discount_amount = Decimal(0)
+
+    if promo_code_str:
+        try:
+            promo = PromoCode.objects.get(code__iexact=promo_code_str)
+            if promo.is_valid():
+                discount_amount = (subtotal * promo.discount_percentage) / 100
+                messages.success(request, f"Promo code applied! You saved LE {discount_amount:.2f}")
             else:
-                promo_form.add_error('code', 'Promo code expired or order value too low.')
+                messages.error(request, "Promo code is not valid or expired.")
         except PromoCode.DoesNotExist:
-            promo_form.add_error('code', 'Promo code not found.')
+            messages.error(request, "Promo code not found.")
 
-    # تأكيد الطلب
-    if request.method == 'POST' and order_form.is_valid():
-        order = order_form.save(commit=False)
-        order.shipping_fee = shipping_fee
-        order.total_price = grand_total
-        order.save()
+    grand_total = subtotal - discount_amount + shipping_fee
 
-        # نقل عناصر السلة إلى الطلب
-        cart_items = CartItem.objects.filter(session_key=session_key)
-        for item in cart_items:
-            OrderItem.objects.create(
-                order=order,
-                product_code=item.product.product_code,
-                quantity=item.quantity
-            )
 
-        # تفريغ السلة
-        cart_items.delete()
+    if request.method == 'POST':
+        if form.is_valid():
+            # حفظ الطلب
+            order = form.save(commit=False)
+            order.shipping_fee = shipping_fee
+            order.total_price = grand_total
+            order.save()
 
-        messages.success(request, "Your order has been placed successfully!")
-        return redirect('order_success', order_id=order.id)
+            # ربط العناصر بالطلب وإنشاء OrderItem
+            cart_items = CartItem.objects.filter(session_key=session_key)
+            for item in cart_items:
+                order_item = OrderItem(
+                    order=order,
+                    product_code=item.product.product_code,  # تخزين product_code هنا
+                    quantity=item.quantity
+                )
+                order_item.save()  # حفظ العنصر في الطلب
+
+            # تفريغ السلة بعد إتمام الطلب
+            CartItem.objects.filter(session_key=session_key).delete()
+
+            messages.success(request, "Your order has been placed successfully!")
+            return redirect('order_success', order_id=order.id)
+    else:
+        form = OrderForm()
 
     governments = Government.objects.all()
 
     return render(request, 'store/checkout.html', {
-        'form': order_form,
-        'promo_form': promo_form,
+        'form': form,
         'subtotal': subtotal,
         'shipping_fee': shipping_fee,
-        'discount': discount_amount,
         'grand_total': grand_total,
         'governments': governments,
+        'discount_amount': discount_amount if discount_amount > 0 else None
     })
 
 def order_success(request,order_id):
@@ -195,7 +191,41 @@ def order_success(request,order_id):
 
     return render(request,'store/order_success.html',context)
 
+def calculate_total_price(request):
+    session_key = request.session.session_key
+    if not session_key:
+        request.session.create()
+        session_key = request.session.session_key
+
+    subtotal = Decimal(0)
+    cart_items = CartItem.objects.filter(session_key=session_key)
+    for item in cart_items:
+        subtotal += Decimal(item.get_total_price())
+
+    shipping_fee = Decimal(70)
+    total = subtotal + shipping_fee 
+    return {
+        'subtotal': subtotal,
+        'shipping_fee': shipping_fee,
+        'total': total
+    }
+
 def privacy_policy(request):    
 
     return render(request, 'store/privacy_policy.html')
 
+
+def validate_promo_code(request):
+    code = request.GET.get('code', '')
+    subtotal = Decimal(request.GET.get('subtotal', '0'))
+    discount = 0
+
+    try:
+        promo = PromoCode.objects.get(code__iexact=code)
+        if promo.is_valid():
+            discount = (subtotal * promo.discount_percentage) / 100
+            return JsonResponse({'valid': True, 'discount': float(discount)})
+        else:
+            return JsonResponse({'valid': False, 'message': 'Promo code expired or inactive'})
+    except PromoCode.DoesNotExist:
+        return JsonResponse({'valid': False, 'message': 'Promo code not found'})

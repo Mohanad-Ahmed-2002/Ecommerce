@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django import forms
 from cloudinary_storage.storage import MediaCloudinaryStorage
+from datetime import date,timezone
 from django.utils import timezone
 
 
@@ -91,29 +92,16 @@ class OrderItem(models.Model):
         return f"{self.get_product().name} - {self.quantity}"
 
 class PromoCode(models.Model):
-
-    DISCOUNT_TYPE_CHOICES = (
-        ('percentage', 'Percentage'),
-        ('fixed', 'Fixed Amount'),
-    )
-
-    code = models.CharField(max_length=50, unique=True, verbose_name="Promo Code")
-    discount_type = models.CharField(max_length=10, choices=DISCOUNT_TYPE_CHOICES)
-    discount_value = models.FloatField()
+    code = models.CharField(max_length=50, unique=True)
+    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)
     is_active = models.BooleanField(default=True)
-    expiry_date = models.DateTimeField()
-    min_order_value = models.FloatField(default=0, verbose_name="Minimum Order Value")
+    expiration_date = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    
     def is_valid(self):
-        return self.is_active and self.expiry_date > timezone.now()
+        return self.is_active and self.expiration_date > timezone.now()
+
 
     def __str__(self):
         return self.code
 
-class PromoCodeForm(forms.Form):
-    code = forms.CharField(
-        label='Promo Code',
-        max_length=50,
-        widget=forms.TextInput(attrs={'placeholder': 'Enter promo code'})
-    )
