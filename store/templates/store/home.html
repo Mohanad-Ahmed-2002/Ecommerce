@@ -62,12 +62,14 @@
     </div>
 
     <section
-        class="flex flex-col items-center justify-center min-h-screen bg-[url('/static/images/moS.jpeg')] bg-cover bg-center bg-no-repeat">
+        class="flex items-center justify-center h-screen bg-[url('/static/images/moS.jpeg')] bg-cover bg-center bg-no-repeat">
         <a href="{% url 'products' %}"
-            class="relative inline-block text-center text-xl px-10 py-4 text-black font-bold rounded-full bg-silver hover:bg-black-600 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border-2 border-transparent focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 motion-safe:animate-pulse mt-80">
+            class="relative inline-block text-lg sm:text-xl px-8 sm:px-10 py-3 sm:py-4 text-black font-bold rounded-full bg-gray-200 hover:bg-black hover:text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border-2 border-transparent focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 motion-safe:animate-pulse mt-80 "
+            aria-label="Start shopping from product page">
             Start Shopping
         </a>
     </section>
+
 
     <section class="py-24 px-8" id="about">
         <div class="container mx-auto max-w-6xl">
@@ -93,17 +95,17 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-12 mt-16">
                 <div class="text-center space-y-4">
-                    <i class="fa-solid fa-glasses text-6xl text-black"></i>
+                    <i class="fa-solid fa-glasses text-6xl text-black animate-bounce delay-100"></i>
                     <h4 class="text-2xl font-bold text-gray-900">Quality Glasses</h4>
                     <p class="text-gray-600">Crafted with precision and designed for comfort.</p>
                 </div>
                 <div class="text-center space-y-4">
-                    <i class="fa-solid fa-heart text-6xl text-black"></i>
+                    <i class="fa-solid fa-heart text-6xl text-black animate-pulse delay-200"></i>
                     <h4 class="text-2xl font-bold text-gray-900">Customer Care</h4>
                     <p class="text-gray-600">We ensure you get the perfect fit with exceptional service.</p>
                 </div>
                 <div class="text-center space-y-4">
-                    <i class="fa-solid fa-truck-fast text-6xl text-black"></i>
+                    <i class="fa-solid fa-truck-fast text-6xl text-black animate-bounce delay-300"></i>
                     <h4 class="text-2xl font-bold text-gray-900">Fast Delivery</h4>
                     <p class="text-gray-600">Enjoy speedy and reliable delivery across the country.</p>
                 </div>
